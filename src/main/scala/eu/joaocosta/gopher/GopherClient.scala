@@ -2,9 +2,9 @@ package eu.joaocosta.gopher
 
 import java.io.*
 import java.net.*
-import scala.io.Source
 import scala.util.Try
 import scala.util.Using
+import scala.io.*
 
 object GopherClient:
   final case class GopherItem(itemType: Char, userString: String, selector: String, hostname: String, port: Int)
@@ -28,7 +28,6 @@ object GopherClient:
         port = 1
       )
 
-
   def request(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
       val socket = new Socket(hostname, port)
@@ -41,7 +40,7 @@ object GopherClient:
       out.flush()
 
       println("Waiting response")
-      use(Source.fromInputStream(in)).getLines().map(str => GopherItem.parse(str)).toList
+      use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
 
   def requestText(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
@@ -55,4 +54,4 @@ object GopherClient:
       out.flush()
 
       println("Waiting response")
-      use(Source.fromInputStream(in)).getLines().map(str => GopherItem.info(str)).toList
+      use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList

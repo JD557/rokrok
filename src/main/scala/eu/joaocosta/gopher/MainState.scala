@@ -7,6 +7,7 @@ import scala.util.{Try, Success}
 final case class MainState(
     query: String = "localhost",
     pageContent: Try[List[GopherClient.GopherItem]] = Success(MainState.defaultHomepage),
+    searchInput: Option[String] = None,
     offset: Int = 0
 ):
 
@@ -29,6 +30,10 @@ final case class MainState(
   def loadText(): MainState =
     copy(pageContent = Try(port.toInt).flatMap(port => GopherClient.requestText(selector, host, port)), offset = 0)
 
+  /** Loads the nextpage with the search query */
+  def performSearch(): MainState =
+    copy(query = query + searchInput.map(search => s"\t$search").getOrElse(""), searchInput = None).loadPage()
+
   /** Content ignoring errors */
   val content = pageContent.getOrElse(Nil)
 
@@ -42,9 +47,8 @@ object MainState:
     GopherClient.GopherItem.info("Welcome to the Scala Gopher Client!"),
     GopherClient.GopherItem.info("Here are some cool links to get you started"),
     GopherClient.GopherItem.info("-------------------------------------------"),
-    GopherClient.GopherItem('1', "Floodgap systems", "/", "gopher.floodgap.com", 70),
+    GopherClient.GopherItem('1', "Veronica-2 - The reincarnated Gopher search engine!", "/v2", "gopher.floodgap.com", 70),
     GopherClient.GopherItem('1', "Gopher News - A Google News Reader for Gopher", "/", "gophernews.net", 70),
     GopherClient.GopherItem('1', "HN Gopher - A Hacker News Mirror", "/", "hngopher.com", 70),
-    GopherClient.GopherItem('1', "Gopherpedia - The gopher interface to Wikipedia", "/", "gopherpedia.com", 70),
-
+    GopherClient.GopherItem('1', "Gopherpedia - The gopher interface to Wikipedia", "/", "gopherpedia.com", 70)
   )

@@ -12,8 +12,8 @@ def header(area: Rect): ComponentWithValue[MainState] =
 
     def render(appState: Ref[MainState]): Component[Unit] =
       var triggerRequest = false
-      var goHome = false
-      appState.modifyRefs: (query, _, offset) =>
+      var goHome         = false
+      appState.modifyRefs: (query, _, _, offset) =>
         rectangle(area, headerColor)
         columns(area.shrink(8), 8, 5): column =>
           text(column(0), textColor, "Gopher", Font("unscii", 16, 8), alignLeft, centerVertically)

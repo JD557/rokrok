@@ -15,6 +15,7 @@ object MainApp:
   def application(inputState: InputState) =
     ui(inputState, uiContext):
       onTop(errorWindow(Rect(0, 0, 400, 200).centerAt(fullArea.centerX, fullArea.centerY))(appState))
+      onTop(searchWindow(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY))(appState))
       dynamicRows(fullArea, padding = 0): nextRow =>
         header(nextRow(headerSize))(appState)
         itemList(nextRow(maxSize))(appState)

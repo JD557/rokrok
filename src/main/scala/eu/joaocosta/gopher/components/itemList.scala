@@ -15,7 +15,7 @@ def itemList(area: Rect): ComponentWithValue[MainState] =
     def render(appState: Ref[MainState]): Component[Unit] =
       dynamicColumns(area, 3): nextColumn =>
         val maxOffset = math.max(0, appState.get.content.size - maxItems)
-        appState.modifyRefs: (_, _, offset) =>
+        appState.modifyRefs: (_, _, _, offset) =>
           slider("itemScroll", nextColumn(-sliderSize), 0, maxOffset)(offset)
         val start = appState.get.offset
         val end   = start + maxItems

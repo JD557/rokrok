@@ -60,10 +60,12 @@ object MinartBackend:
       .flatMap {
         case Enter => ""
         case x =>
-          x.baseChar.map(char =>
-            if (keyboardInput.keysDown(Shift)) char.toUpper.toString
-            else char.toString
-          ).getOrElse("")
+          x.baseChar
+            .map(char =>
+              if (keyboardInput.keysDown(Shift)) char.toUpper.toString
+              else char.toString
+            )
+            .getOrElse("")
       }
       .mkString
 
