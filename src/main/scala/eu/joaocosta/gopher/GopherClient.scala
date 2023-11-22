@@ -15,7 +15,7 @@ object GopherClient:
     def parse(str: String): GopherItem =
       val raw = str.split("\t")
       GopherItem(
-        itemType = raw.applyOrElse(0, _ => "").headOption.getOrElse('i'),
+        itemType = raw.applyOrElse(0, _ => "").headOption.getOrElse('1'),
         userString = raw.applyOrElse(0, _ => "").drop(1),
         selector = raw.applyOrElse(1, _ => ""),
         hostname = raw.applyOrElse(2, _ => ""),

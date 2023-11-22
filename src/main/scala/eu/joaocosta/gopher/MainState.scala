@@ -11,13 +11,25 @@ final case class MainState(
     searchInput: Option[String] = None,
     offset: Int = 0
 ):
-  val (host: String, port: Int, selector: String) =
+  val (host: String, port: Int, gopherPath: String) =
     val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
     baseQuery match
       case s"$host:$port/$selector" => (host, port.toIntOption.getOrElse(70), "/" + selector)
       case s"$host/$selector"       => (host, 70, "/" + selector)
       case s"$host:$port"           => (host, port.toIntOption.getOrElse(70), "/")
       case host                     => (host, 70, "/")
+
+  val (itemType: Char, selector: String) = gopherPath match
+    case s"/$itemType/$selector" if itemType.size == 1 =>
+      (itemType.head, "/" + selector)
+    case selector => ('1', selector)
+
+  /** Loads the specified URL, trying to autodetect the format */
+  def load(): MainState =
+    itemType match
+      case '0'                   => loadText()
+      case 'I' | ':' | '9' | 'p' => loadBitmap()
+      case _                     => loadPage()
 
   /** Returns to the initial state */
   def loadHome(): MainState = MainState()

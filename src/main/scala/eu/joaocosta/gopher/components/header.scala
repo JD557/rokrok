@@ -22,5 +22,5 @@ def header(area: Rect): ComponentWithValue[MainState] =
           triggerRequest = button("go", column(6), "Go")
           goHome = button("home", column(7), "Home")
       appState
-        .modifyIf(triggerRequest)(_.loadPage())
+        .modifyIf(triggerRequest)(_.load())
         .modifyIf(goHome)(_.loadHome())
