@@ -5,22 +5,26 @@ import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.gopher.*
 
 /** Gopher item list */
-def gopherItem(area: Rect, item: GopherClient.GopherItem): ComponentWithValue[MainState] =
+def gopherItem(id: ItemId, area: Rect, item: GopherClient.GopherItem): ComponentWithValue[MainState] =
   new ComponentWithValue[MainState]:
     def render(appState: Ref[MainState]): Component[Unit] =
       columns(area.shrink(3), 5, 2): column =>
         item.itemType match
           case '0' =>
-            appState.modifyIf(link(item.userString, column(0) ++ column(3), item.userString))(
+            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString))(
               _.copy(query = s"${item.hostname}:${item.port}${item.selector}").loadText()
             )
           case '1' | '+' =>
-            appState.modifyIf(link(item.userString, column(0) ++ column(3), item.userString))(
+            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString))(
               _.copy(query = s"${item.hostname}:${item.port}${item.selector}").loadPage()
             )
           case '7' =>
-            appState.modifyIf(link(item.userString, column(0) ++ column(3), item.userString))(
+            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString))(
               _.copy(query = s"${item.hostname}:${item.port}${item.selector}", searchInput = Some(""))
+            )
+          case 'I' | ':' | '9' | 'p' if item.selector.endsWith(".bmp") =>
+            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString))(
+              _.copy(query = s"${item.hostname}:${item.port}${item.selector}").loadBitmap()
             )
           case _ =>
             text(column(0) ++ column(3), Color(0, 0, 0), item.userString)

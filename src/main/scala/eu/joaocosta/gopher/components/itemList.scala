@@ -14,15 +14,15 @@ def itemList(area: Rect): ComponentWithValue[MainState] =
 
     def render(appState: Ref[MainState]): Component[Unit] =
       dynamicColumns(area, 3): nextColumn =>
-        val maxOffset = math.max(0, appState.get.content.size - maxItems)
+        val maxOffset = math.max(0, appState.get.textContent.size - maxItems)
         appState.modifyRefs: (_, _, _, offset) =>
-          slider("itemScroll", nextColumn(-sliderSize), 0, maxOffset)(offset)
+          slider("itemList" |> "scroll", nextColumn(-sliderSize), 0, maxOffset)(offset)
         val start = appState.get.offset
         val end   = start + maxItems
         rows(nextColumn(maxSize), maxItems, rowPadding): row =>
-          appState.get.content.zipWithIndex
+          appState.get.textContent.zipWithIndex
             .slice(start, end)
             .zip(row)
             .foreach:
               case ((item, idx), itemArea) =>
-                gopherItem(itemArea, item)(appState)
+                gopherItem("itemList" |> idx, itemArea, item)(appState)

@@ -6,6 +6,9 @@ import scala.util.Try
 import scala.util.Using
 import scala.io.*
 
+import eu.joaocosta.minart.graphics.image.bmp.BmpImageFormat
+import eu.joaocosta.minart.graphics.RamSurface
+
 object GopherClient:
   final case class GopherItem(itemType: Char, userString: String, selector: String, hostname: String, port: Int)
   object GopherItem:
@@ -31,6 +34,7 @@ object GopherClient:
   def request(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
       val socket = new Socket(hostname, port)
+      socket.setSoTimeout(5000)
 
       val in  = use(socket.getInputStream())
       val out = use(socket.getOutputStream())
@@ -45,6 +49,7 @@ object GopherClient:
   def requestText(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
       val socket = new Socket(hostname, port)
+      socket.setSoTimeout(5000)
 
       val in  = use(socket.getInputStream())
       val out = use(socket.getOutputStream())
@@ -55,3 +60,19 @@ object GopherClient:
 
       println("Waiting response")
       use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList
+
+  def requestBmp(selector: String, hostname: String, port: Int): Try[RamSurface] =
+    val result = Using.Manager: use =>
+      val socket = new Socket(hostname, port)
+      socket.setSoTimeout(5000)
+
+      val in  = use(socket.getInputStream())
+      val out = use(socket.getOutputStream())
+
+      println("Perfoming request")
+      out.write(s"$selector\r\n".getBytes())
+      out.flush()
+
+      println("Waiting response")
+      BmpImageFormat.defaultFormat.loadImage(in).left.map(message => new Exception(message)).toTry
+    result.flatten

@@ -18,7 +18,12 @@ object MainApp:
       onTop(searchWindow(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY))(appState))
       dynamicRows(fullArea, padding = 0): nextRow =>
         header(nextRow(headerSize))(appState)
-        itemList(nextRow(maxSize))(appState)
+        val contentArea = nextRow(maxSize)
+        itemList(contentArea)(appState)
+        appState.get.pageContent.toOption
+          .flatMap(_.left.toOption)
+          .foreach: image =>
+            custom(contentArea, Color(0, 0, 0), image)
 
   @main def main() =
     MinartBackend.run(Settings(width = fullArea.w, height = fullArea.h, title = "Gopher"))(application)

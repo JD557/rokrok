@@ -1,7 +1,7 @@
 //> using scala "3.3.1"
 
 //> using lib "eu.joaocosta::minart::0.6.0-SNAPSHOT"
-//> using lib "eu.joaocosta::interim::0.1.5-1"
+//> using lib "eu.joaocosta::interim::0.1.6-SNAPSHOT"
 //> using lib "io.get-coursier:coursier_2.13:2.1.7"
 //> using lib "io.get-coursier:coursier-install_2.13:2.1.7"
 
