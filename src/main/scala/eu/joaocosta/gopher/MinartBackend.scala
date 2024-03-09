@@ -103,6 +103,15 @@ object MinartBackend:
         canvas.clear()
         val ops = body(inputState)._1
         renderUi(canvas, ops)
+        val scanY = (System.currentTimeMillis() / 7) % canvas.height
+        val postProcessed = canvas.view
+          .flatMap((color) =>
+            (x, y) =>
+              val scanLineSub = MinartColor.grayscale(15 * (y % 2))
+              val scanLineAdd = if (y >= scanY && y <= scanY + 30) MinartColor(0, 5, 0) else MinartColor(0, 0, 0)
+              color - scanLineSub + scanLineAdd
+          )
+        canvas.blit(postProcessed)(0, 0)
         canvas.redraw()
       }
       .configure(canvasSettings, LoopFrequency.hz60)

@@ -2,6 +2,7 @@ package eu.joaocosta.gopher
 
 import scala.util.*
 import eu.joaocosta.minart.graphics.RamSurface
+import eu.joaocosta.interim.PanelState
 
 /** Main application state
   */
@@ -9,7 +10,8 @@ final case class MainState(
     query: String = "localhost",
     pageContent: Try[Either[RamSurface, List[GopherClient.GopherItem]]] = Success(Right(MainState.defaultHomepage)),
     searchInput: Option[String] = None,
-    offset: Int = 0
+    offset: Int = 0,
+    fileMenu: PanelState[Int] = PanelState.closed(0)
 ):
   val (host: String, port: Int, gopherPath: String) =
     val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
