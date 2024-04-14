@@ -5,6 +5,7 @@ import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.gopher.*
 import scala.util.*
+import scala.concurrent.Future
 
 /** Error window */
 def errorWindow(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainState] =
@@ -20,4 +21,4 @@ def errorWindow(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainSt
             skin = WindowSkin.default().copy(colorScheme = colorScheme)
           ): windowArea =>
             text(windowArea.shrink(4), colorScheme.text, message)
-        appState.modifyIf(nextState.isEmpty)(_.copy(pageContent = Success(Right(Nil))))
+        appState.modifyIf(nextState.isEmpty)(_.copy(pageContent = Future.successful(Right(Nil))))

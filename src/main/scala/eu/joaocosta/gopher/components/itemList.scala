@@ -16,7 +16,7 @@ def itemList(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainState
     def render(appState: Ref[MainState]): Component[Unit] =
       dynamicColumns(area, 3): nextColumn =>
         val maxOffset = math.max(0, appState.get.textContent.size - maxItems)
-        appState.modifyRefs: (_, _, _, offset, _) =>
+        appState.modifyRefs: (_, _, _, offset, _, _, _) =>
           slider(
             "itemList" |> "scroll",
             nextColumn(-sliderSize),

@@ -96,7 +96,7 @@ object MinartBackend:
         canvas.fillRegion(x, y, w, h, MinartColor(color.r, color.g, color.b))
     }
 
-  def run(canvasSettings: Canvas.Settings)(body: InputState => (List[RenderOp], _)): Future[Unit] =
+  def run(canvasSettings: Canvas.Settings, postProcess: => Boolean)(body: InputState => (List[RenderOp], _)): Future[Unit] =
     AppLoop
       .statelessRenderLoop { (canvas: Canvas) =>
         val inputState = getInputState(canvas)
@@ -104,13 +104,16 @@ object MinartBackend:
         val ops = body(inputState)._1
         renderUi(canvas, ops)
         val scanY = (System.currentTimeMillis() / 7) % canvas.height
-        val postProcessed = canvas.view
-          .flatMap((color) =>
-            (x, y) =>
-              val scanLineSub = MinartColor.grayscale(15 * (y % 2))
-              val scanLineAdd = if (y >= scanY && y <= scanY + 30) MinartColor(0, 5, 0) else MinartColor(0, 0, 0)
-              color - scanLineSub + scanLineAdd
-          )
+        val postProcessed =
+          if (postProcess)
+            canvas.view
+              .flatMap((color) =>
+                (x, y) =>
+                  val scanLineSub = MinartColor.grayscale(15 * (y % 2))
+                  val scanLineAdd = if (y >= scanY && y <= scanY + 30) MinartColor(0, 5, 0) else MinartColor(0, 0, 0)
+                  color - scanLineSub + scanLineAdd
+              )
+          else canvas
         canvas.blit(postProcessed)(0, 0)
         canvas.redraw()
       }

@@ -15,6 +15,9 @@ test:
 run:
   scala-cli --power --suppress-experimental-warning .
 
+run-native:
+  scala-cli --power --suppress-experimental-warning --native .
+
 publish:
   scala-cli --power publish .
 

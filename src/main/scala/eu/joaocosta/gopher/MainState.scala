@@ -3,15 +3,21 @@ package eu.joaocosta.gopher
 import scala.util.*
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.interim.PanelState
+import scala.concurrent.*
+import scala.concurrent.ExecutionContext.Implicits.global
+import eu.joaocosta.interim.skins.ColorScheme
 
 /** Main application state
   */
 final case class MainState(
     query: String = "localhost",
-    pageContent: Try[Either[RamSurface, List[GopherClient.GopherItem]]] = Success(Right(MainState.defaultHomepage)),
+    pageContent: Future[Either[RamSurface, List[GopherClient.GopherItem]]] =
+      Future.successful(Right(MainState.defaultHomepage)),
     searchInput: Option[String] = None,
     offset: Int = 0,
-    fileMenu: PanelState[Int] = PanelState.closed(0)
+    fileMenu: PanelState[Int] = PanelState.closed(0),
+    skinMenu: PanelState[Int] = PanelState.closed(0),
+    colorScheme: ColorScheme = ColorScheme.lightScheme
 ):
   val (host: String, port: Int, gopherPath: String) =
     val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
@@ -39,21 +45,27 @@ final case class MainState(
   /** Loads the page specified */
   def loadPage(): MainState =
     copy(
-      pageContent = Try(port.toInt).flatMap(port => GopherClient.request(selector, host, port).map(Right.apply)),
+      pageContent = Future
+        .fromTry(Try(port.toInt))
+        .flatMap(port => GopherClient.requestAsync(selector, host, port).map(Right.apply)),
       offset = 0
     )
 
   /** Loads the specified raw text file */
   def loadText(): MainState =
     copy(
-      pageContent = Try(port.toInt).flatMap(port => GopherClient.requestText(selector, host, port).map(Right.apply)),
+      pageContent = Future
+        .fromTry(Try(port.toInt))
+        .flatMap(port => GopherClient.requestTextAsync(selector, host, port).map(Right.apply)),
       offset = 0
     )
 
   /** Loads the specified raw bitmap file */
   def loadBitmap(): MainState =
     copy(
-      pageContent = Try(port.toInt).flatMap(port => GopherClient.requestBmp(selector, host, port).map(Left.apply)),
+      pageContent = Future
+        .fromTry(Try(port.toInt))
+        .flatMap(port => GopherClient.requestBmpAsync(selector, host, port).map(Left.apply)),
       offset = 0
     )
 
@@ -62,11 +74,12 @@ final case class MainState(
     copy(query = query + searchInput.map(search => s"\t$search").getOrElse(""), searchInput = None).loadPage()
 
   /** Text content ignoring errors and binary files */
-  val textContent = pageContent.toOption.flatMap(_.toOption).getOrElse(Nil)
+  val textContent = pageContent.value.flatMap(_.toOption).flatMap(_.toOption).getOrElse(Nil)
 
   /** Error message, populated if the page loading failed */
   def errorMessage: Option[String] =
-    pageContent.failed.toOption
+    pageContent.failed.value
+      .flatMap(_.toOption)
       .map(_.getMessage)
 
 object MainState:

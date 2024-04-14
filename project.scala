@@ -1,11 +1,11 @@
-//> using scala "3.3.1"
+//> using scala "3.3.3"
+//> using nativeVersion 0.5.0
+//> using nativeMode release
 
-//> using lib "eu.joaocosta::minart::0.6.0-SNAPSHOT"
-//> using lib "eu.joaocosta::interim::0.1.6-SNAPSHOT"
-//> using lib "io.get-coursier:coursier_2.13:2.1.7"
-//> using lib "io.get-coursier:coursier-install_2.13:2.1.7"
+//> using dep "eu.joaocosta::minart::0.6.0-M3"
+//> using dep "eu.joaocosta::interim::0.1.7-SNAPSHOT"
 
-//> using test.dep org.scalameta::munit::1.0.0-M10
+////> using test.dep org.scalameta::munit::1.0.0-M10
 
 //> using resource-dir "src/main/resources/"
 //> using option "-deprecation"

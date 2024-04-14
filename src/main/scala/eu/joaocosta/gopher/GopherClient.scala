@@ -5,6 +5,7 @@ import java.net.*
 import scala.util.Try
 import scala.util.Using
 import scala.io.*
+import scala.concurrent.*
 
 import eu.joaocosta.minart.graphics.image.bmp.BmpImageFormat
 import eu.joaocosta.minart.graphics.RamSurface
@@ -46,6 +47,11 @@ object GopherClient:
       println("Waiting response")
       use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
 
+  def requestAsync(selector: String, hostname: String, port: Int)(implicit
+      ec: ExecutionContext
+  ): Future[List[GopherItem]] =
+    Future(blocking(request(selector, hostname, port).get))
+
   def requestText(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
       val socket = new Socket(hostname, port)
@@ -60,6 +66,11 @@ object GopherClient:
 
       println("Waiting response")
       use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList
+
+  def requestTextAsync(selector: String, hostname: String, port: Int)(implicit
+      ec: ExecutionContext
+  ): Future[List[GopherItem]] =
+    Future(blocking(requestText(selector, hostname, port).get))
 
   def requestBmp(selector: String, hostname: String, port: Int): Try[RamSurface] =
     val result = Using.Manager: use =>
@@ -76,3 +87,8 @@ object GopherClient:
       println("Waiting response")
       BmpImageFormat.defaultFormat.loadImage(in).left.map(message => new Exception(message)).toTry
     result.flatten
+
+  def requestBmpAsync(selector: String, hostname: String, port: Int)(implicit
+      ec: ExecutionContext
+  ): Future[RamSurface] =
+    Future(blocking(requestBmp(selector, hostname, port).get))
