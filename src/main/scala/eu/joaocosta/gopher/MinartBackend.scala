@@ -96,16 +96,22 @@ object MinartBackend:
         canvas.fillRegion(x, y, w, h, MinartColor(color.r, color.g, color.b))
     }
 
-  def run(canvasSettings: Canvas.Settings, postProcess: => Boolean)(body: InputState => (List[RenderOp], _)): Future[Unit] =
+  def run(canvasSettings: Canvas.Settings, getSettings: => state.Settings)(
+      body: InputState => (List[RenderOp], _)
+  ): Future[Unit] =
     AppLoop
       .statelessRenderLoop { (canvas: Canvas) =>
+        val appSettings = getSettings
+        if (appSettings.fullScreen != canvas.canvasSettings.fullScreen) {
+          canvas.changeSettings(canvas.canvasSettings.copy(fullScreen = appSettings.fullScreen))
+        }
         val inputState = getInputState(canvas)
         canvas.clear()
         val ops = body(inputState)._1
         renderUi(canvas, ops)
         val scanY = (System.currentTimeMillis() / 7) % canvas.height
         val postProcessed =
-          if (postProcess)
+          if (appSettings.postProcess)
             canvas.view
               .flatMap((color) =>
                 (x, y) =>

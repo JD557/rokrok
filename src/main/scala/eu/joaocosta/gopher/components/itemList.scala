@@ -4,6 +4,7 @@ import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.gopher.*
+import eu.joaocosta.gopher.state.MainState
 
 /** List with all items */
 def itemList(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainState] =
@@ -16,7 +17,7 @@ def itemList(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainState
     def render(appState: Ref[MainState]): Component[Unit] =
       dynamicColumns(area, 3): nextColumn =>
         val maxOffset = math.max(0, appState.get.textContent.size - maxItems)
-        appState.modifyRefs: (_, _, _, offset, _, _, _) =>
+        appState.modifyRefs: (_, _, _, offset, _) =>
           slider(
             "itemList" |> "scroll",
             nextColumn(-sliderSize),

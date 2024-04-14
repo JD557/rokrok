@@ -4,6 +4,7 @@ import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.gopher.*
+import eu.joaocosta.gopher.state.MainState
 import scala.util.*
 import scala.concurrent.Future
 

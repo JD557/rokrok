@@ -4,6 +4,7 @@ import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.gopher.*
+import eu.joaocosta.gopher.state.MainState
 
 /** Gopher item list */
 def gopherItem(

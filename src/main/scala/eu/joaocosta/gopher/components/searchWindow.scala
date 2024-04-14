@@ -5,13 +5,14 @@ import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.gopher.*
 import scala.util.Success
+import eu.joaocosta.gopher.state.MainState
 
 /** Search window */
 def searchWindow(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainState] =
   new ComponentWithValue[MainState]:
     def render(appState: Ref[MainState]): Component[Unit] =
       var triggerSearch = false
-      appState.modifyRefs: (query, _, searchInput, _, _, _, _) =>
+      appState.modifyRefs: (query, _, searchInput, _, _) =>
         searchInput.get.foreach: searchQuery =>
           val (newSearchInput, _) = window(
             "search_window",

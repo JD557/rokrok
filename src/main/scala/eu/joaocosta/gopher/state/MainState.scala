@@ -1,4 +1,4 @@
-package eu.joaocosta.gopher
+package eu.joaocosta.gopher.state
 
 import scala.util.*
 import eu.joaocosta.minart.graphics.RamSurface
@@ -6,6 +6,7 @@ import eu.joaocosta.interim.PanelState
 import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import eu.joaocosta.interim.skins.ColorScheme
+import eu.joaocosta.gopher.GopherClient
 
 /** Main application state
   */
@@ -15,9 +16,7 @@ final case class MainState(
       Future.successful(Right(MainState.defaultHomepage)),
     searchInput: Option[String] = None,
     offset: Int = 0,
-    fileMenu: PanelState[Int] = PanelState.closed(0),
-    skinMenu: PanelState[Int] = PanelState.closed(0),
-    colorScheme: ColorScheme = ColorScheme.lightScheme
+    settings: Settings = Settings()
 ):
   val (host: String, port: Int, gopherPath: String) =
     val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
