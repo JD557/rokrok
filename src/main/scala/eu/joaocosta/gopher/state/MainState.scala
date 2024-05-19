@@ -82,13 +82,8 @@ final case class MainState(
       .map(_.getMessage)
 
 object MainState:
-  val defaultHomepage = List(
-    GopherClient.GopherItem.info("Welcome to the Scala Gopher Client!"),
-    GopherClient.GopherItem.info("Here are some cool links to get you started"),
-    GopherClient.GopherItem.info("-------------------------------------------"),
-    GopherClient
-      .GopherItem('1', "Veronica-2 - The reincarnated Gopher search engine!", "/v2", "gopher.floodgap.com", 70),
-    GopherClient.GopherItem('1', "Gopher News - A Google News Reader for Gopher", "/", "gophernews.net", 70),
-    GopherClient.GopherItem('1', "HN Gopher - A Hacker News Mirror", "/", "hngopher.com", 70),
-    GopherClient.GopherItem('1', "Gopherpedia - The gopher interface to Wikipedia", "/", "gopherpedia.com", 70)
-  )
+  val defaultHomepage =
+    Using.Manager { use =>
+      val is = use(this.getClass().getResourceAsStream("/homepage.txt"))
+      GopherClient.GopherItem.parse(is).get
+    }.get

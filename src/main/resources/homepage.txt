@@ -1,0 +1,7 @@
+iWelcome to the Scala Gopher Client!
+iHere are some cool links to get you started
+i-------------------------------------------
+1Veronica-2 - The reincarnated Gopher search engine!	/v2	gopher.floodgap.com	70
+1Gopher News - A Google News Reader for Gopher	/	gophernews.net	70
+1HN Gopher - A Hacker News Mirror	/	hngopher.com	70
+1Gopherpedia - The gopher interface to Wikipedia	/	gopherpedia.com	70

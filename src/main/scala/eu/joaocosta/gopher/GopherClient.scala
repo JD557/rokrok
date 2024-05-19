@@ -32,6 +32,10 @@ object GopherClient:
         port = 1
       )
 
+    def parse(inputStream: InputStream): Try[List[GopherItem]] = Using.Manager: use =>
+      use(Source.fromInputStream(inputStream)(Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
+
+
   def request(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
       val socket = new Socket(hostname, port)
@@ -45,7 +49,7 @@ object GopherClient:
       out.flush()
 
       println("Waiting response")
-      use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
+      GopherItem.parse(in).get
 
   def requestAsync(selector: String, hostname: String, port: Int)(implicit
       ec: ExecutionContext
@@ -65,7 +69,7 @@ object GopherClient:
       out.flush()
 
       println("Waiting response")
-      use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList
+      GopherItem.parse(in).get
 
   def requestTextAsync(selector: String, hostname: String, port: Int)(implicit
       ec: ExecutionContext
