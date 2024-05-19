@@ -68,7 +68,7 @@ object GopherClient:
       out.flush()
 
       println("Waiting response")
-      GopherItem.parse(in).get
+      use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList
 
   def requestTextAsync(selector: String, hostname: String, port: Int)(implicit
       ec: ExecutionContext
