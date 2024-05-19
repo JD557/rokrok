@@ -35,7 +35,6 @@ object GopherClient:
     def parse(inputStream: InputStream): Try[List[GopherItem]] = Using.Manager: use =>
       use(Source.fromInputStream(inputStream)(Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
 
-
   def request(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
       val socket = new Socket(hostname, port)

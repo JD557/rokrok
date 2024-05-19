@@ -21,7 +21,7 @@ object MainApp:
       onTop(searchWindow(colorScheme)(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY), appState))
 
       dynamicRows(fullArea, padding = 0): nextRow ?=>
-        appState.modifyRefs: (_, _, _, _, settings) =>
+        appState.modifyRefs: (_, _, _, _, _, settings) =>
           menuBar(colorScheme)(nextRow(16), settings)
         header(colorScheme)(appState)
         val contentArea = nextRow.fill()

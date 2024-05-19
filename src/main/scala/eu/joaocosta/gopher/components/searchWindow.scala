@@ -13,7 +13,7 @@ def searchWindow(colorScheme: ColorScheme): ComponentWithValue[MainState] =
   new ComponentWithValue[MainState]:
     def render(area: Rect, appState: Ref[MainState]): Component[Unit] =
       var triggerSearch = false
-      appState.modifyRefs: (query, _, searchInput, _, _) =>
+      appState.modifyRefs: (query, _, searchInput, _, _, _) =>
         searchInput.get.foreach: searchQuery =>
           val (newSearchInput, _) = window(
             "search_window",

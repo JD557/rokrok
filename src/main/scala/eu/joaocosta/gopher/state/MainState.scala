@@ -15,6 +15,7 @@ final case class MainState(
     pageContent: Future[Either[RamSurface, List[GopherClient.GopherItem]]] =
       Future.successful(Right(MainState.defaultHomepage)),
     searchInput: Option[String] = None,
+    history: List[String] = Nil,
     offset: Int = 0,
     settings: Settings = Settings()
 ):
@@ -41,12 +42,23 @@ final case class MainState(
   /** Returns to the initial state */
   def loadHome(): MainState = MainState()
 
+  /** Returns to the previous page */
+  def goBack(): MainState = history match
+    case curr :: prev :: remainingHistory =>
+      copy(
+        query = prev,
+        searchInput = None,
+        history = remainingHistory,
+      ).load()
+    case _ => loadHome()
+
   /** Loads the page specified */
   def loadPage(): MainState =
     copy(
       pageContent = Future
         .fromTry(Try(port.toInt))
         .flatMap(port => GopherClient.requestAsync(selector, host, port).map(Right.apply)),
+      history = query :: history,
       offset = 0
     )
 
@@ -56,6 +68,7 @@ final case class MainState(
       pageContent = Future
         .fromTry(Try(port.toInt))
         .flatMap(port => GopherClient.requestTextAsync(selector, host, port).map(Right.apply)),
+      history = query :: history,
       offset = 0
     )
 
@@ -65,12 +78,17 @@ final case class MainState(
       pageContent = Future
         .fromTry(Try(port.toInt))
         .flatMap(port => GopherClient.requestBmpAsync(selector, host, port).map(Left.apply)),
+      history = query :: history,
       offset = 0
     )
 
   /** Loads the nextpage with the search query */
   def performSearch(): MainState =
-    copy(query = query + searchInput.map(search => s"\t$search").getOrElse(""), searchInput = None).loadPage()
+    copy(
+      query = query + searchInput.map(search => s"\t$search").getOrElse(""),
+      history = query :: history,
+      searchInput = None
+    ).loadPage()
 
   /** Text content ignoring errors and binary files */
   val textContent = pageContent.value.flatMap(_.toOption).flatMap(_.toOption).getOrElse(Nil)
