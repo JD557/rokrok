@@ -52,6 +52,12 @@ object MinartBackend:
       BitmapFont("assets/unscii-16.bmp", 8, 16, ' ')
     )
   )
+  // https://robey.lag.net/2020/02/09/bizcat-bitmap-font.html
+  private val bizcat = BitmapFontPack(
+    List(
+      BitmapFont("assets/bizcat.bmp", 8, 16, '\u0000'),
+    )
+  )
 
   private def processKeyboard(keyboardInput: KeyboardInput): String =
     import KeyboardInput.Key._
@@ -80,7 +86,9 @@ object MinartBackend:
       case RenderOp.DrawRect(Rect(x, y, w, h), color) =>
         canvas.fillRegion(x, y, w, h, MinartColor(color.r, color.g, color.b))
       case op: RenderOp.DrawText =>
-        val font = unscii.withSize(op.font.fontSize)
+        val font = 
+          if (op.font.name == "bizcat") bizcat.withSize(op.font.fontSize)
+          else unscii.withSize(op.font.fontSize)
         op.asDrawChars.foreach { case RenderOp.DrawChar(Rect(x, y, _, _), color, char) =>
           val charSprite =
             font.coloredChar(char, MinartColor(color.r, color.g, color.b))

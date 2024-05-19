@@ -28,7 +28,7 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
   val fontSelect =
     select(
       "font",
-      Vector("Unscii-8", "Unscii-16"),
+      Vector("Unscii-8", "Unscii-16", "Bizcat"),
       "Font",
       SelectSkin.default().copy(colorScheme = colorScheme)
     )
@@ -68,6 +68,9 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
               fontMenu.modify(_.copy(value = -1))
             case PanelState(_, 1) =>
               font := Font("unscii", 16, 8)
+              fontMenu.modify(_.copy(value = -1))
+            case PanelState(_, 2) =>
+              font := Font("bizcat", 16, 8)
               fontMenu.modify(_.copy(value = -1))
             case PanelState(false, _) =>
               skinMenu.modify(_.copy(value = -1))
