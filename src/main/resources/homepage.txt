@@ -5,3 +5,4 @@ i-------------------------------------------
 1Gopher News - A Google News Reader for Gopher	/	gophernews.net	70
 1HN Gopher - A Hacker News Mirror	/	hngopher.com	70
 1Gopherpedia - The gopher interface to Wikipedia	/	gopherpedia.com	70
+1Quux - Archive with multiple files	/	quux.org	70

@@ -25,7 +25,7 @@ def itemList(colorScheme: ColorScheme): DynamicComponentWithValue[MainState] =
             0,
             maxOffset,
             SliderSkin.default().copy(colorScheme = colorScheme)
-          )(offset)
+          )(nextColumn(16), offset)
         val start = appState.get.offset
         val end   = start + maxItems
         rows(nextColumn(maxSize), maxItems, rowPadding): row ?=>
