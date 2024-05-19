@@ -9,6 +9,7 @@ final def link(
     id: ItemId,
     area: Rect,
     label: String,
+    font: Font,
     colorScheme: ColorScheme
 ): Component[Boolean] =
   val itemStatus = UiContext.registerItem(id, area)
@@ -20,5 +21,5 @@ final def link(
     case _ =>
       colorScheme.primaryShadow
   }
-  text(area, color, label)
+  text(area, color, label, font)
   itemStatus.clicked

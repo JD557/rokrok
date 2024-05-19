@@ -40,7 +40,7 @@ final case class MainState(
       case _                     => loadPage()
 
   /** Returns to the initial state */
-  def loadHome(): MainState = MainState()
+  def loadHome(): MainState = MainState(settings = settings)
 
   /** Returns to the previous page */
   def goBack(): MainState = history match

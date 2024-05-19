@@ -8,10 +8,10 @@ import eu.joaocosta.gopher.state.MainState
 import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** List with all items */
-def itemList(colorScheme: ColorScheme): DynamicComponentWithValue[MainState] =
+def itemList(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[MainState] =
   new DynamicComponentWithValue[MainState]:
-    val rowSize    = 16
     val rowPadding = 0
+    val rowSize    = font.lineHeight + 2 * rowPadding
 
     def allocateArea(using allocator: AreaAllocator): Rect = allocator.fill()
 
@@ -34,4 +34,4 @@ def itemList(colorScheme: ColorScheme): DynamicComponentWithValue[MainState] =
             .zip(row)
             .foreach:
               case ((item, idx), itemArea) =>
-                gopherItem("itemList" |> idx, item, colorScheme)(itemArea, appState)
+                gopherItem("itemList" |> idx, item, font, colorScheme)(itemArea, appState)

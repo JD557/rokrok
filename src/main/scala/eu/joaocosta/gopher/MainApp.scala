@@ -16,6 +16,7 @@ object MainApp:
 
   def application(inputState: InputState) =
     val colorScheme = appState.get.settings.colorScheme
+    val font = appState.get.settings.font
     ui(inputState, uiContext):
       onTop(errorWindow(colorScheme)(Rect(0, 0, 400, 200).centerAt(fullArea.centerX, fullArea.centerY), appState))
       onTop(searchWindow(colorScheme)(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY), appState))
@@ -26,7 +27,7 @@ object MainApp:
         header(colorScheme)(appState)
         val contentArea = nextRow.fill()
         rectangle(contentArea, colorScheme.background)
-        itemList(colorScheme)(contentArea, appState)
+        itemList(font, colorScheme)(contentArea, appState)
         appState.get.pageContent.value
           .flatMap(_.toOption)
           .flatMap(_.left.toOption)
