@@ -1,9 +1,9 @@
 //> using scala "3.3.3"
-//> using nativeVersion 0.5.0
+//> using nativeVersion 0.5.1
 //> using nativeMode release
 
-//> using dep "eu.joaocosta::minart::0.6.0-M3"
-//> using dep "eu.joaocosta::interim::0.1.7-SNAPSHOT"
+//> using dep "eu.joaocosta::minart::0.6.0"
+//> using dep "eu.joaocosta::interim::0.2.0"
 
 ////> using test.dep org.scalameta::munit::1.0.0-M10
 

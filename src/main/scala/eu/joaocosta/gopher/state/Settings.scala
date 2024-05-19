@@ -11,8 +11,8 @@ import eu.joaocosta.gopher.components.PhosphorTheme
 /** Application Settings and state for relevant setting components
   */
 final case class Settings(
-    fileMenu: PanelState[Int] = PanelState.closed(0),
-    skinMenu: PanelState[Int] = PanelState.closed(0),
+    fileMenu: PanelState[Int] = PanelState.closed(-1),
+    skinMenu: PanelState[Int] = PanelState.closed(-1),
     colorScheme: ColorScheme = ColorScheme.lightScheme,
     fullScreen: Boolean = false
 ) {

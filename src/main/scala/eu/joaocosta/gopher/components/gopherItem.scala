@@ -5,18 +5,18 @@ import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.gopher.*
 import eu.joaocosta.gopher.state.MainState
+import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Gopher item list */
 def gopherItem(
     id: ItemId,
-    area: Rect,
     item: GopherClient.GopherItem,
     colorScheme: ColorScheme
 ): ComponentWithValue[MainState] =
   new ComponentWithValue[MainState]:
-    def render(appState: Ref[MainState]): Component[Unit] =
+    def render(area: Rect, appState: Ref[MainState]): Component[Unit] =
       lazy val targetUrl = s"${item.hostname}:${item.port}/${item.itemType}${item.selector}"
-      columns(area.shrink(3), 5, 2): column =>
+      columns(area.shrink(3), 5, 2): column ?=>
         item.itemType match
           case '0' | '1' | '+' =>
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, colorScheme))(

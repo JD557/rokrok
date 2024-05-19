@@ -5,32 +5,33 @@ import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.gopher.*
 import eu.joaocosta.gopher.state.MainState
+import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** List with all items */
-def itemList(area: Rect, colorScheme: ColorScheme): ComponentWithValue[MainState] =
-  new ComponentWithValue[MainState]:
+def itemList(colorScheme: ColorScheme): DynamicComponentWithValue[MainState] =
+  new DynamicComponentWithValue[MainState]:
     val rowSize    = 16
     val rowPadding = 0
-    val maxItems   = area.h / (rowSize + rowPadding)
-    val sliderSize = 16
 
-    def render(appState: Ref[MainState]): Component[Unit] =
-      dynamicColumns(area, 3): nextColumn =>
+    def allocateArea(using allocator: AreaAllocator): Rect = allocator.fill()
+
+    def render(area: Rect, appState: Ref[MainState]): Component[Unit] =
+      val maxItems = area.h / (rowSize + rowPadding)
+      dynamicColumns(area, 3, alignRight): nextColumn ?=>
         val maxOffset = math.max(0, appState.get.textContent.size - maxItems)
         appState.modifyRefs: (_, _, _, offset, _) =>
           slider(
             "itemList" |> "scroll",
-            nextColumn(-sliderSize),
             0,
             maxOffset,
             SliderSkin.default().copy(colorScheme = colorScheme)
           )(offset)
         val start = appState.get.offset
         val end   = start + maxItems
-        rows(nextColumn(maxSize), maxItems, rowPadding): row =>
+        rows(nextColumn(maxSize), maxItems, rowPadding): row ?=>
           appState.get.textContent.zipWithIndex
             .slice(start, end)
             .zip(row)
             .foreach:
               case ((item, idx), itemArea) =>
-                gopherItem("itemList" |> idx, itemArea, item, colorScheme)(appState)
+                gopherItem("itemList" |> idx, item, colorScheme)(itemArea, appState)
