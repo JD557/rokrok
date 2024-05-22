@@ -1,12 +1,12 @@
-package eu.joaocosta.gopher
+package eu.joaocosta.rokrok
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.minart.graphics.Canvas.Settings
 import eu.joaocosta.minart.graphics.{Color => MinartColor}
-import eu.joaocosta.gopher.components.*
-import eu.joaocosta.gopher.state.*
+import eu.joaocosta.rokrok.components.*
+import eu.joaocosta.rokrok.state.*
 
 object MainApp:
   val uiContext = new UiContext()
@@ -16,7 +16,7 @@ object MainApp:
 
   def application(inputState: InputState) =
     val colorScheme = appState.get.settings.colorScheme
-    val font = appState.get.settings.font
+    val font        = appState.get.settings.font
     ui(inputState, uiContext):
       onTop(errorWindow(colorScheme)(Rect(0, 0, 400, 200).centerAt(fullArea.centerX, fullArea.centerY), appState))
       onTop(searchWindow(colorScheme)(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY), appState))

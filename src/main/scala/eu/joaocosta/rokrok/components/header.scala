@@ -1,10 +1,10 @@
-package eu.joaocosta.gopher.components
+package eu.joaocosta.rokrok.components
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
-import eu.joaocosta.gopher.*
-import eu.joaocosta.gopher.state.MainState
+import eu.joaocosta.rokrok.*
+import eu.joaocosta.rokrok.state.MainState
 import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Header component with the search bar */
@@ -23,7 +23,7 @@ def header(colorScheme: ColorScheme): DynamicComponentWithValue[MainState] =
       appState.modifyRefs: (query, _, _, history, offset, _) =>
         rectangle(area, colorScheme.secondaryHighlight)
         columns(area.shrink(8), 10, 5): column ?=>
-          text(column(0), colorScheme.text, "Gopher", Font("unscii", 16, 8), alignLeft, centerVertically)
+          text(column(0), colorScheme.text, "RokRok", Font("unscii", 16, 8), alignLeft, centerVertically)
           text(column(1), colorScheme.text, "URL:", Font.default, alignRight, centerVertically)
           textInput("url", TextInputSkin.default().copy(colorScheme = colorScheme))(column(2) ++ column(6), query)
           button("go", "Go", ButtonSkin.default().copy(colorScheme = colorScheme))(column(7)):

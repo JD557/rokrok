@@ -1,10 +1,10 @@
-package eu.joaocosta.gopher.components
+package eu.joaocosta.rokrok.components
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.ColorScheme
-import eu.joaocosta.gopher.*
-import eu.joaocosta.gopher.state.MainState
+import eu.joaocosta.rokrok.*
+import eu.joaocosta.rokrok.state.MainState
 import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Gopher item list */
@@ -27,7 +27,7 @@ def gopherItem(
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl, searchInput = Some(""))
             )
-          case 'I' | ':' | '9' if item.selector.endsWith(".bmp")  =>
+          case 'I' | ':' | '9' if item.selector.endsWith(".bmp") =>
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl).loadBitmap()
             )

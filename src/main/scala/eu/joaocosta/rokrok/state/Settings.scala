@@ -1,4 +1,4 @@
-package eu.joaocosta.gopher.state
+package eu.joaocosta.rokrok.state
 
 import scala.util.*
 import eu.joaocosta.minart.graphics.RamSurface
@@ -7,7 +7,7 @@ import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.interim.Font
-import eu.joaocosta.gopher.components.PhosphorTheme
+import eu.joaocosta.rokrok.components.PhosphorTheme
 
 /** Application Settings and state for relevant setting components
   */

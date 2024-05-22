@@ -1,10 +1,10 @@
-package eu.joaocosta.gopher.components
+package eu.joaocosta.rokrok.components
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
-import eu.joaocosta.gopher.*
-import eu.joaocosta.gopher.state.Settings
+import eu.joaocosta.rokrok.*
+import eu.joaocosta.rokrok.state.Settings
 import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Menu bar */

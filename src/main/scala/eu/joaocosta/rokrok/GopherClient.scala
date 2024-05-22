@@ -1,4 +1,4 @@
-package eu.joaocosta.gopher
+package eu.joaocosta.rokrok
 
 import java.io.*
 import java.net.*

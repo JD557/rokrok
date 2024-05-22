@@ -1,4 +1,4 @@
-package eu.joaocosta.gopher.components
+package eu.joaocosta.rokrok.components
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.skins.ColorScheme
