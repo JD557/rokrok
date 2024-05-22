@@ -27,7 +27,7 @@ def gopherItem(
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl, searchInput = Some(""))
             )
-          case 'I' | ':' | '9' | 'p' if item.selector.endsWith(".bmp") =>
+          case 'I' | ':' | '9' if item.selector.endsWith(".bmp")  =>
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl).loadBitmap()
             )
@@ -44,7 +44,9 @@ def gopherItem(
           case '7'                         => "[SEARCH]"
           case '8' | 'T'                   => "[TELNET]"
           case '9'                         => "[BINARY]"
-          case 'g' | 'I' | ':' | 'p'       => "[IMAGE]"
+          case 'I' | ':'                   => "[IMAGE]"
+          case 'p'                         => "[PNG]"
+          case 'g'                         => "[GIF]"
           case ';'                         => "[VIDEO]"
           case '<' | 's'                   => "[SOUND]"
           case 'd' | 'h' | 'r' | 'P' | 'x' => "[DOCUMENT]"
