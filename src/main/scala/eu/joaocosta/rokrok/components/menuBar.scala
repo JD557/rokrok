@@ -20,7 +20,7 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
   val skinSelect =
     select(
       "skin",
-      Vector("Light", "Dark", "Phosphor"),
+      Settings.colorSchemes.map(_._1),
       "Skin",
       SelectSkin.default().copy(colorScheme = colorScheme)
     )
@@ -28,7 +28,7 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
   val fontSelect =
     select(
       "font",
-      Vector("Unscii-8", "Unscii-16", "Bizcat"),
+      Settings.fonts.map(_._1),
       "Font",
       SelectSkin.default().copy(colorScheme = colorScheme)
     )
@@ -38,41 +38,26 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
       settings.modifyRefs: (fileMenu, skinMenu, fontMenu, newColorScheme, font, fullScreen) =>
         rectangle(area, colorScheme.secondary)
         dynamicColumns(area, 0):
-          fileSelect(fullScreen.get)(fileMenu) match {
+          fileSelect(fullScreen.get)(fileMenu) match
             case PanelState(_, 0) =>
               fullScreen.modify(!_)
               fileMenu.modify(_.copy(value = -1))
             case PanelState(_, 1)     => System.exit(0)
             case PanelState(false, _) => fileMenu.modify(_.copy(value = -1))
-            case _                    =>
-          }
+            case _                    => ()
 
-          skinSelect(skinMenu) match {
-            case PanelState(_, 0) =>
-              newColorScheme := ColorScheme.lightScheme
-              skinMenu.modify(_.copy(value = -1))
-            case PanelState(_, 1) =>
-              newColorScheme := ColorScheme.darkScheme
-              skinMenu.modify(_.copy(value = -1))
-            case PanelState(_, 2) =>
-              newColorScheme := PhosphorTheme
+          skinSelect(skinMenu) match
+            case PanelState(_, idx) if Settings.colorSchemes.indices.contains(idx) =>
+              newColorScheme := Settings.colorSchemes(idx)._2
               skinMenu.modify(_.copy(value = -1))
             case PanelState(false, _) =>
               skinMenu.modify(_.copy(value = -1))
-            case _ =>
-          }
+            case _ => ()
 
-          fontSelect(fontMenu) match {
-            case PanelState(_, 0) =>
-              font := Font("unscii", 8, 8)
-              fontMenu.modify(_.copy(value = -1))
-            case PanelState(_, 1) =>
-              font := Font("unscii", 16, 8)
-              fontMenu.modify(_.copy(value = -1))
-            case PanelState(_, 2) =>
-              font := Font("bizcat", 16, 8)
+          fontSelect(fontMenu) match
+            case PanelState(_, idx) if Settings.fonts.indices.contains(idx) =>
+              font := Settings.fonts(idx)._2
               fontMenu.modify(_.copy(value = -1))
             case PanelState(false, _) =>
-              skinMenu.modify(_.copy(value = -1))
-            case _ =>
-          }
+              fontMenu.modify(_.copy(value = -1))
+            case _ => ()

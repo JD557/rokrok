@@ -15,9 +15,23 @@ final case class Settings(
     fileMenu: PanelState[Int] = PanelState.closed(-1),
     skinMenu: PanelState[Int] = PanelState.closed(-1),
     fontMenu: PanelState[Int] = PanelState.closed(-1),
-    colorScheme: ColorScheme = ColorScheme.lightScheme,
-    font: Font = Font("unscii", 8, 8),
+    colorScheme: ColorScheme = Settings.colorSchemes.head._2,
+    font: Font = Settings.fonts.head._2,
     fullScreen: Boolean = false
-) {
+):
   val postProcess: Boolean = colorScheme == PhosphorTheme
-}
+
+object Settings:
+  val colorSchemes: Vector[(String, ColorScheme)] =
+    Vector(
+      "Light"    -> ColorScheme.lightScheme,
+      "Dark"     -> ColorScheme.darkScheme,
+      "Phosphor" -> PhosphorTheme
+    )
+
+  val fonts: Vector[(String, Font)] =
+    Vector(
+      "Unscii-8"  -> Font("unscii", 8, 8),
+      "Unscii-16" -> Font("unscii", 16, 8),
+      "Bizcat"    -> Font("bizcat", 16, 8)
+    )
