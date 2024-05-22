@@ -1,4 +1,4 @@
-package eu.joaocosta.rokrok.components
+package eu.joaocosta.rokrok.colorschemes
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.skins.ColorScheme

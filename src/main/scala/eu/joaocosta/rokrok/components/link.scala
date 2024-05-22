@@ -14,12 +14,12 @@ final def link(
 ): Component[Boolean] =
   val itemStatus = UiContext.registerItem(id, area)
   val color = itemStatus match {
-    case UiContext.ItemStatus(true, false, _, _) =>
-      colorScheme.primary
+    case UiContext.ItemStatus(true, _, _, _) =>
+      colorScheme.primaryHighlight
     case UiContext.ItemStatus(_, true, _, _) =>
       colorScheme.primaryHighlight
     case _ =>
-      colorScheme.primaryShadow
+      colorScheme.primary
   }
   text(area, color, label, font)
   itemStatus.clicked

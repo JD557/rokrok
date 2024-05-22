@@ -7,7 +7,7 @@ import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.interim.Font
-import eu.joaocosta.rokrok.components.PhosphorTheme
+import eu.joaocosta.rokrok.colorschemes.*
 
 /** Application Settings and state for relevant setting components
   */
@@ -24,8 +24,8 @@ final case class Settings(
 object Settings:
   val colorSchemes: Vector[(String, ColorScheme)] =
     Vector(
-      "Light"    -> ColorScheme.lightScheme,
-      "Dark"     -> ColorScheme.darkScheme,
+      "Light"    -> LightTheme,
+      "Dark"     -> DarkTheme,
       "Phosphor" -> PhosphorTheme
     )
 
