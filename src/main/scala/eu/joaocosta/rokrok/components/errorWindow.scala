@@ -19,7 +19,8 @@ def errorWindow(colorScheme: ColorScheme): ComponentWithValue[MainState] =
             "error",
             "Error",
             closable = true,
-            skin = WindowSkin.default().copy(colorScheme = colorScheme)
+            skin = WindowSkin.default().copy(colorScheme = colorScheme),
+            handleSkin = HandleSkin.default().copy(colorScheme = colorScheme)
           )(area): windowArea =>
             text(windowArea.shrink(4), colorScheme.text, message)
         appState.modifyIf(nextState.isEmpty)(_.copy(pageContent = Future.successful(Right(Nil))))

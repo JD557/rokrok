@@ -20,10 +20,12 @@ object MainApp:
     ui(inputState, uiContext):
       onTop(errorWindow(colorScheme)(Rect(0, 0, 400, 200).centerAt(fullArea.centerX, fullArea.centerY), appState))
       onTop(searchWindow(colorScheme)(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY), appState))
+      appState.modifyRefs: (_, _, _, _, _, settings) =>
+        onTop(settingsWindow(colorScheme)(settings))
 
       dynamicRows(fullArea, padding = 0): nextRow ?=>
         appState.modifyRefs: (_, _, _, _, _, settings) =>
-          menuBar(colorScheme)(nextRow(16), settings)
+          menuBar(colorScheme)(nextRow(20), settings)
         header(colorScheme)(appState)
         val contentArea = nextRow.fill()
         rectangle(contentArea, colorScheme.background)

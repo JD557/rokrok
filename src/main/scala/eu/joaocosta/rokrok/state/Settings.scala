@@ -1,24 +1,25 @@
 package eu.joaocosta.rokrok.state
 
-import scala.util.*
+import eu.joaocosta.interim.skins.ColorScheme
+import eu.joaocosta.interim.*
 import eu.joaocosta.minart.graphics.RamSurface
-import eu.joaocosta.interim.PanelState
+import eu.joaocosta.rokrok.colorschemes.*
+
 import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
-import eu.joaocosta.interim.skins.ColorScheme
-import eu.joaocosta.interim.Font
-import eu.joaocosta.rokrok.colorschemes.*
+import scala.util.*
 
 /** Application Settings and state for relevant setting components
   */
 final case class Settings(
+    panelState: PanelState[Rect] = PanelState.closed(Rect(0, 0, 0, 0)),
     fileMenu: PanelState[Int] = PanelState.closed(-1),
-    skinMenu: PanelState[Int] = PanelState.closed(-1),
-    fontMenu: PanelState[Int] = PanelState.closed(-1),
-    colorScheme: ColorScheme = Settings.colorSchemes.head._2,
-    font: Font = Settings.fonts.head._2,
+    skinMenu: PanelState[Int] = PanelState.closed(0),
+    fontMenu: PanelState[Int] = PanelState.closed(0),
     fullScreen: Boolean = false
 ):
+  val colorScheme: ColorScheme = Settings.colorSchemes(skinMenu.value)._2
+  val font: Font = Settings.fonts(fontMenu.value)._2
   val postProcess: Boolean = colorScheme == PhosphorTheme
 
 object Settings:

@@ -19,7 +19,8 @@ def searchWindow(colorScheme: ColorScheme): ComponentWithValue[MainState] =
             "search_window",
             "Search",
             closable = true,
-            skin = WindowSkin.default().copy(colorScheme = colorScheme)
+            skin = WindowSkin.default().copy(colorScheme = colorScheme),
+            handleSkin = HandleSkin.default().copy(colorScheme = colorScheme)
           )(area): windowArea =>
             columns(windowArea.shrink(4).copy(h = 16), 4, padding = 5): column ?=>
               text(column(0), colorScheme.text, "Search:", Font.default, alignRight, centerVertically)
