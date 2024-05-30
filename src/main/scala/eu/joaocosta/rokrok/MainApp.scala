@@ -31,11 +31,8 @@ object MainApp:
           val contentArea = nextRow.fill()
           rectangle(contentArea, colorScheme.background)
           itemList(font, colorScheme)(contentArea, page)
-          page.get.content.value
-            .flatMap(_.toOption)
-            .flatMap(_.left.toOption)
-            .foreach: image =>
-              custom(contentArea, colorScheme.background, image)
+          page.get.imageContent.foreach: surface =>
+            image(colorScheme)(contentArea, surface)
 
   @main def main() =
     MinartBackend.run(

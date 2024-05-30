@@ -89,7 +89,10 @@ final case class Page(
     ).loadPage()
 
   /** Text content ignoring errors and binary files */
-  val textContent = content.value.flatMap(_.toOption).flatMap(_.toOption).getOrElse(Nil)
+  val textContent: List[GopherClient.GopherItem] = content.value.flatMap(_.toOption).flatMap(_.toOption).getOrElse(Nil)
+
+  /** Image content, ignoring errors and text files */
+  val imageContent: Option[RamSurface] = content.value.flatMap(_.toOption).flatMap(_.left.toOption)
 
   /** Error message, populated if the page loading failed */
   def errorMessage: Option[String] =
