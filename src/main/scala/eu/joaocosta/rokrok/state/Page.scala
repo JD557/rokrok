@@ -16,18 +16,7 @@ final case class Page(
     history: List[String] = Nil,
     offset: Int = 0
 ):
-  val (host: String, port: Int, gopherPath: String) =
-    val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
-    baseQuery match
-      case s"$host:$port/$selector" => (host, port.toIntOption.getOrElse(70), "/" + selector)
-      case s"$host/$selector"       => (host, 70, "/" + selector)
-      case s"$host:$port"           => (host, port.toIntOption.getOrElse(70), "/")
-      case host                     => (host, 70, "/")
-
-  val (itemType: Char, selector: String) = gopherPath match
-    case s"/$itemType/$selector" if itemType.size == 1 =>
-      (itemType.head, "/" + selector)
-    case selector => ('1', selector)
+  val Page.ParsedQuery(host, port, itemType, selector) = Page.parseQuery(query)
 
   /** Loads the specified URL, trying to autodetect the format */
   def load(): Page =
@@ -52,9 +41,7 @@ final case class Page(
   /** Loads the page specified */
   def loadPage(): Page =
     copy(
-      content = Future
-        .fromTry(Try(port.toInt))
-        .flatMap(port => GopherClient.requestAsync(selector, host, port).map(Right.apply)),
+      content = GopherClient.requestAsync(selector, host, port).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -62,9 +49,7 @@ final case class Page(
   /** Loads the specified raw text file */
   def loadText(): Page =
     copy(
-      content = Future
-        .fromTry(Try(port.toInt))
-        .flatMap(port => GopherClient.requestTextAsync(selector, host, port).map(Right.apply)),
+      content = GopherClient.requestTextAsync(selector, host, port).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -72,9 +57,7 @@ final case class Page(
   /** Loads the specified raw bitmap file */
   def loadBitmap(): Page =
     copy(
-      content = Future
-        .fromTry(Try(port.toInt))
-        .flatMap(port => GopherClient.requestBmpAsync(selector, host, port).map(Left.apply)),
+      content = GopherClient.requestBmpAsync(selector, host, port).map(Left.apply),
       history = query :: history,
       offset = 0
     )
@@ -105,3 +88,20 @@ object Page:
       val is = use(this.getClass().getResourceAsStream("/homepage.txt"))
       GopherClient.GopherItem.parse(is).get
     }.get
+
+  final case class ParsedQuery(host: String, port: Int, itemType: Char, selector: String)
+
+  def parseQuery(query: String): ParsedQuery =
+    val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
+    val (host: String, port: Int, gopherPath: String) = baseQuery match
+      case s"$host:$port/$selector" => (host, port.toIntOption.getOrElse(70), "/" + selector)
+      case s"$host/$selector"       => (host, 70, "/" + selector)
+      case s"$host:$port"           => (host, port.toIntOption.getOrElse(70), "/")
+      case host                     => (host, 70, "/")
+
+    val (itemType: Char, selector: String) = gopherPath match
+      case s"/$itemType/$selector" if itemType.size == 1 =>
+        (itemType.head, "/" + selector)
+      case selector => ('1', selector)
+
+    ParsedQuery(host, port, itemType, selector)
