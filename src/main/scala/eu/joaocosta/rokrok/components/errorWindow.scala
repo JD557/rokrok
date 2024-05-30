@@ -5,7 +5,6 @@ import scala.util.*
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
-import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.rokrok.*
 import eu.joaocosta.rokrok.state.Page

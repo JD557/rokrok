@@ -1,12 +1,7 @@
 package eu.joaocosta.rokrok.state
 
-import scala.concurrent.*
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.*
-
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.skins.ColorScheme
-import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.colorschemes.*
 
 /** Application Settings and state for relevant setting components

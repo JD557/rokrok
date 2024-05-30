@@ -1,5 +1,5 @@
-//> using scala "3.3.3"
-//> using nativeVersion 0.5.1
+//> using scala "3.4.2"
+//> using nativeVersion 0.5.2
 //> using nativeMode release
 
 //> using dep "eu.joaocosta::minart::0.6.0"

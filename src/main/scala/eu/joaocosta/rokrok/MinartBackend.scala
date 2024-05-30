@@ -105,7 +105,7 @@ object MinartBackend:
     }
 
   def run(canvasSettings: Canvas.Settings, getSettings: => state.Settings)(
-      body: InputState => (List[RenderOp], _)
+      body: InputState => (List[RenderOp], ?)
   ): Future[Unit] =
     AppLoop
       .statelessRenderLoop { (canvas: Canvas) =>
