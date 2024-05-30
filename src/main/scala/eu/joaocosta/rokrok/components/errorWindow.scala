@@ -1,13 +1,14 @@
 package eu.joaocosta.rokrok.components
 
+import scala.concurrent.Future
+import scala.util.*
+
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
+import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.rokrok.*
 import eu.joaocosta.rokrok.state.Page
-import scala.util.*
-import scala.concurrent.Future
-import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Error window */
 def errorWindow(colorScheme: ColorScheme): ComponentWithValue[Page] =

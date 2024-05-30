@@ -4,8 +4,8 @@ import scala.concurrent.Future
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.minart.backend.defaults.given
-import eu.joaocosta.minart.graphics.image.*
 import eu.joaocosta.minart.graphics.{Color => MinartColor, *}
+import eu.joaocosta.minart.graphics.image.*
 import eu.joaocosta.minart.input.*
 import eu.joaocosta.minart.runtime.*
 

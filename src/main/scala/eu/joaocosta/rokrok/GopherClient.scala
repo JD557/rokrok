@@ -2,13 +2,13 @@ package eu.joaocosta.rokrok
 
 import java.io.*
 import java.net.*
+import scala.concurrent.*
+import scala.io.*
 import scala.util.Try
 import scala.util.Using
-import scala.io.*
-import scala.concurrent.*
 
-import eu.joaocosta.minart.graphics.image.bmp.BmpImageFormat
 import eu.joaocosta.minart.graphics.RamSurface
+import eu.joaocosta.minart.graphics.image.bmp.BmpImageFormat
 
 object GopherClient:
   final case class GopherItem(itemType: Char, userString: String, selector: String, hostname: String, port: Int)

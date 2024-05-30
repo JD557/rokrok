@@ -2,10 +2,10 @@ package eu.joaocosta.rokrok.components
 
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
+import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.rokrok.*
 import eu.joaocosta.rokrok.state.Page
-import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Gopher item list */
 def gopherItem(

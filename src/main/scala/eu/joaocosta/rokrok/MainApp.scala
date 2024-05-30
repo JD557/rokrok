@@ -3,8 +3,8 @@ package eu.joaocosta.rokrok
 import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.ColorScheme
-import eu.joaocosta.minart.graphics.Canvas.Settings
 import eu.joaocosta.minart.graphics.{Color => MinartColor}
+import eu.joaocosta.minart.graphics.Canvas.Settings
 import eu.joaocosta.rokrok.components.*
 import eu.joaocosta.rokrok.state.*
 
