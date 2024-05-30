@@ -21,4 +21,3 @@ class PageSpec extends munit.FunSuite:
       Page.parseQuery("example.org:71/2/query"),
       Page.parseQuery("gopher://example.org:71/2/query")
     )
-
