@@ -4,7 +4,7 @@ import eu.joaocosta.interim.*
 import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.ColorScheme
 import eu.joaocosta.rokrok.*
-import eu.joaocosta.rokrok.state.MainState
+import eu.joaocosta.rokrok.state.Page
 import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Gopher item list */
@@ -13,22 +13,22 @@ def gopherItem(
     item: GopherClient.GopherItem,
     font: Font,
     colorScheme: ColorScheme
-): ComponentWithValue[MainState] =
-  new ComponentWithValue[MainState]:
-    def render(area: Rect, appState: Ref[MainState]): Component[Unit] =
+): ComponentWithValue[Page] =
+  new ComponentWithValue[Page]:
+    def render(area: Rect, pageState: Ref[Page]): Component[Unit] =
       lazy val targetUrl = s"${item.hostname}:${item.port}/${item.itemType}${item.selector}"
       columns(area.shrink(3).copy(h = area.h), 5, 2): column ?=>
         item.itemType match
           case '0' | '1' | '+' => // TEXT
-            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
+            pageState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl).load()
             )
           case '7' => // LINK
-            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
+            pageState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl, searchInput = Some(""))
             )
           case 'I' | ':' | '9' if item.selector.endsWith(".bmp") => // IMAGE
-            appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
+            pageState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl).loadBitmap()
             )
           case _ =>

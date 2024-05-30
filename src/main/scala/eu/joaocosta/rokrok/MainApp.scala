@@ -15,26 +15,27 @@ object MainApp:
   val appState = Ref(MainState())
 
   def application(inputState: InputState) =
-    val colorScheme = appState.get.settings.colorScheme
-    val font        = appState.get.settings.font
     ui(inputState, uiContext):
-      onTop(errorWindow(colorScheme)(Rect(0, 0, 400, 200).centerAt(fullArea.centerX, fullArea.centerY), appState))
-      onTop(searchWindow(colorScheme)(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY), appState))
-      appState.modifyRefs: (_, _, _, _, _, settings) =>
-        onTop(settingsWindow(colorScheme)(settings))
+      appState.modifyRefs: (page, settings) =>
+        val colorScheme = settings.get.colorScheme
+        val font        = settings.get.font
 
-      dynamicRows(fullArea, padding = 0): nextRow ?=>
-        appState.modifyRefs: (_, _, _, _, _, settings) =>
+        onTop:
+          errorWindow(colorScheme)(Rect(0, 0, 400, 200).centerAt(fullArea.centerX, fullArea.centerY), page)
+          searchWindow(colorScheme)(Rect(0, 0, 400, 50).centerAt(fullArea.centerX, fullArea.centerY), page)
+          settingsWindow(colorScheme)(settings)
+
+        dynamicRows(fullArea, padding = 0): nextRow ?=>
           menuBar(colorScheme)(nextRow(20), settings)
-        header(colorScheme)(appState)
-        val contentArea = nextRow.fill()
-        rectangle(contentArea, colorScheme.background)
-        itemList(font, colorScheme)(contentArea, appState)
-        appState.get.pageContent.value
-          .flatMap(_.toOption)
-          .flatMap(_.left.toOption)
-          .foreach: image =>
-            custom(contentArea, colorScheme.background, image)
+          header(colorScheme)(page)
+          val contentArea = nextRow.fill()
+          rectangle(contentArea, colorScheme.background)
+          itemList(font, colorScheme)(contentArea, page)
+          page.get.content.value
+            .flatMap(_.toOption)
+            .flatMap(_.left.toOption)
+            .foreach: image =>
+              custom(contentArea, colorScheme.background, image)
 
   @main def main() =
     MinartBackend.run(

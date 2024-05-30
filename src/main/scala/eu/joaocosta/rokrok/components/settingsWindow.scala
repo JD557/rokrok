@@ -47,5 +47,8 @@ def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component
             fontSelect(fontMenu)
           columns(nextRow(16), 2, 2):
             text(summon, colorScheme.text, "Full Screen:")
-            checkbox("settings" |> "fullscreen", skin = CheckboxSkin.default().copy(colorScheme = colorScheme))(fullScreen)
-    ).get
+            checkbox("settings" |> "fullscreen", skin = CheckboxSkin.default().copy(colorScheme = colorScheme))(
+              fullScreen
+            )
+    )
+    .get

@@ -19,8 +19,8 @@ final case class Settings(
     fullScreen: Boolean = false
 ):
   val colorScheme: ColorScheme = Settings.colorSchemes(skinMenu.value)._2
-  val font: Font = Settings.fonts(fontMenu.value)._2
-  val postProcess: Boolean = colorScheme == PhosphorTheme
+  val font: Font               = Settings.fonts(fontMenu.value)._2
+  val postProcess: Boolean     = colorScheme == PhosphorTheme
 
 object Settings:
   val colorSchemes: Vector[(String, ColorScheme)] =

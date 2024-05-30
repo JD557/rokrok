@@ -25,7 +25,9 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
           fileSelect(fileMenu) match
             case PanelState(_, 0) =>
               if (settingsPannel.get.isClosed)
-                settingsPannel := PanelState.open(Rect(100, 100, 400, 200).centerAt(MainApp.fullArea.centerX, MainApp.fullArea.centerY))
+                settingsPannel := PanelState.open(
+                  Rect(100, 100, 400, 200).centerAt(MainApp.fullArea.centerX, MainApp.fullArea.centerY)
+                )
               fileMenu.modify(_.copy(value = -1))
             case PanelState(_, 1)     => System.exit(0)
             case PanelState(false, _) => fileMenu.modify(_.copy(value = -1))

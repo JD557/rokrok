@@ -5,15 +5,15 @@ import eu.joaocosta.interim.InterIm.*
 import eu.joaocosta.interim.skins.*
 import eu.joaocosta.rokrok.*
 import scala.util.Success
-import eu.joaocosta.rokrok.state.MainState
+import eu.joaocosta.rokrok.state.Page
 import eu.joaocosta.interim.LayoutAllocator.AreaAllocator
 
 /** Search window */
-def searchWindow(colorScheme: ColorScheme): ComponentWithValue[MainState] =
-  new ComponentWithValue[MainState]:
-    def render(area: Rect, appState: Ref[MainState]): Component[Unit] =
+def searchWindow(colorScheme: ColorScheme): ComponentWithValue[Page] =
+  new ComponentWithValue[Page]:
+    def render(area: Rect, pageState: Ref[Page]): Component[Unit] =
       var triggerSearch = false
-      appState.get.searchInput.foreach: searchQuery =>
+      pageState.get.searchInput.foreach: searchQuery =>
         val (newSearchInput, _) = window(
           "search_window",
           "Search",
@@ -23,7 +23,10 @@ def searchWindow(colorScheme: ColorScheme): ComponentWithValue[MainState] =
         )(area): windowArea =>
           columns(windowArea.shrink(4).copy(h = 16), 4, padding = 5): column ?=>
             text(column(0), colorScheme.text, "Search:", Font.default, alignRight, centerVertically)
-            val newSearch = textInput("search_input", TextInputSkin.default().copy(colorScheme = colorScheme))(column(1) ++ column(2), searchQuery)
-            appState.modify(_.copy(searchInput = Some(newSearch)))
+            val newSearch = textInput("search_input", TextInputSkin.default().copy(colorScheme = colorScheme))(
+              column(1) ++ column(2),
+              searchQuery
+            )
+            pageState.modify(_.copy(searchInput = Some(newSearch)))
             button("search_button", "Search", ButtonSkin.default().copy(colorScheme = colorScheme))(column(3)):
-              appState.modify(_.performSearch())
+              pageState.modify(_.performSearch())
