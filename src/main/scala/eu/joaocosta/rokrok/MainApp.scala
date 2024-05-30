@@ -37,7 +37,7 @@ object MainApp:
       Settings(
         width = fullArea.w,
         height = fullArea.h,
-        title = "Gopher",
+        title = "RokRok",
         fullScreen = false
       ),
       getSettings = appState.get.settings
