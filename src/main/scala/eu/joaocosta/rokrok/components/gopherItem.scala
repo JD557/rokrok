@@ -19,15 +19,15 @@ def gopherItem(
       lazy val targetUrl = s"${item.hostname}:${item.port}/${item.itemType}${item.selector}"
       columns(area.shrink(3).copy(h = area.h), 5, 2): column ?=>
         item.itemType match
-          case '0' | '1' | '+' =>
+          case '0' | '1' | '+' => // TEXT
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl).load()
             )
-          case '7' =>
+          case '7' => // LINK
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl, searchInput = Some(""))
             )
-          case 'I' | ':' | '9' if item.selector.endsWith(".bmp") =>
+          case 'I' | ':' | '9' if item.selector.endsWith(".bmp") => // IMAGE
             appState.modifyIf(link(id |> item.userString, column(0) ++ column(3), item.userString, font, colorScheme))(
               _.copy(query = targetUrl).loadBitmap()
             )
