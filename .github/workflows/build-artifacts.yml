@@ -1,0 +1,89 @@
+name: Build Artifacts
+on:
+  push:
+    branches:
+    - master
+    tags:
+    - "v*"
+  pull_request:
+
+env: 
+  LLVM_VERSION: 17
+
+jobs:
+  linux_build:
+      name: Linux
+      runs-on: ubuntu-24.04
+      steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' 
+          java-version: '17'
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get -y install just libsdl2-dev
+
+      - name: Install Scala-CLI
+        run: |
+          curl -fL https://github.com/Virtuslab/scala-cli/releases/latest/download/scala-cli-x86_64-pc-linux.gz | gzip -d > scala-cli
+          chmod +x scala-cli
+          sudo mv scala-cli /usr/local/bin/scala-cli
+
+      - name: Sets env vars
+        run: |
+          echo "LLVM_BIN=/usr/lib/llvm-$LLVM_VERSION/bin" >> $GITHUB_ENV
+
+      - name: Compile
+        run: scala-cli --power compile --suppress-experimental-warning --server=false .
+
+      - name: Package the binary
+        run: scala-cli --power package --suppress-experimental-warning --native --server=false . -o target/rokrok
+
+      - name: Upload Linux Intel artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: target/rokrok
+          name: linux-binaries
+          if-no-files-found: error
+
+  macos_build:
+    name: MacOS
+    strategy:
+      fail-fast: true
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' 
+          java-version: '17'
+
+      - name: Install Dependencies
+        run: brew install llvm@$LLVM_VERSION sdl2 just
+
+      - name: Install Scala-CLI
+        run: brew install Virtuslab/scala-cli/scala-cli
+
+      - name: Sets env vars
+        run: |
+          echo "LLVM_BIN=/opt/homebrew/opt/llvm@$LLVM_VERSION/bin" >> $GITHUB_ENV
+          
+      - name: Compile
+        run: scala-cli --power compile --suppress-experimental-warning --server=false .
+
+      - name: Package the binary
+        run: scala-cli --power package --suppress-experimental-warning --native --server=false . -o target/rokrok
+
+      - name: Upload Mac OS ARM artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: target/rokrok
+          name: macos-binaries
+          if-no-files-found: error
