@@ -10,8 +10,7 @@ This is mostly a toy project to experiment with Scala Native's multi threading.
 
 You can run the JVM version with `cs launch eu.joaocosta:rokrok_3:latest.release`
 
-For the Native version, you currently need to build from source, which requires SDL2.
-
+For the Native version, you can either download the [latest precompiled release](https://github.com/JD557/rokrok/releases) or build it source, which requires SDL2.
 You can run it with `just run-native`.
 
 ## Acknowledgments
