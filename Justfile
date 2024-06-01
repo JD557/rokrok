@@ -18,6 +18,9 @@ run:
 run-native:
   scala-cli --power --suppress-experimental-warning --native .
 
+package-native out="rokrok":
+  scala-cli --power package --suppress-experimental-warning --native . -o target/{{out}}
+
 publish:
   scala-cli --power publish .
 
