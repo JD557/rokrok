@@ -6,6 +6,14 @@ An experimental [Gopher](https://en.wikipedia.org/wiki/Gopher_(protocol)) browse
 
 This is mostly a toy project to experiment with Scala Native's multi threading.
 
+## Running
+
+You can run the JVM version with `cs launch eu.joaocosta:rokrok_3:latest.release`
+
+For the Native version, you currently need to build from source, which requires SDL2.
+
+You can run it with `just run-native`.
+
 ## Acknowledgments
 
 Fonts:
