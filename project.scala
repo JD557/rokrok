@@ -2,7 +2,7 @@
 //> using nativeVersion 0.5.2
 //> using nativeMode release
 
-//> using dep "eu.joaocosta::minart::0.6.1"
+//> using dep "eu.joaocosta::minart::0.6.2"
 //> using dep "eu.joaocosta::interim::0.2.0"
 
 //> using test.dep "org.scalameta::munit::1.0.2"
