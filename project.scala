@@ -5,7 +5,7 @@
 //> using dep "eu.joaocosta::minart::0.6.2"
 //> using dep "eu.joaocosta::interim::0.2.0"
 
-//> using test.dep "org.scalameta::munit::1.0.2"
+//> using test.dep "org.scalameta::munit::1.0.3"
 
 //> using resource-dir "src/main/resources/"
 //> using option "-deprecation"
