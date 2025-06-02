@@ -13,7 +13,7 @@ final def link(
     colorScheme: ColorScheme
 ): Component[Boolean] =
   val itemStatus = UiContext.registerItem(id, area)
-  val color = itemStatus match {
+  val color      = itemStatus match {
     case UiContext.ItemStatus(true, _, _, _) =>
       colorScheme.primaryHighlight
     case UiContext.ItemStatus(_, true, _, _) =>

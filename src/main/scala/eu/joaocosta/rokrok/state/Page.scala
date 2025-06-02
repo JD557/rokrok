@@ -92,7 +92,7 @@ object Page:
   final case class ParsedQuery(host: String, port: Int, itemType: Char, selector: String)
 
   def parseQuery(query: String): ParsedQuery =
-    val baseQuery = if (query.startsWith("gopher://")) query.drop(9) else query
+    val baseQuery                                     = if (query.startsWith("gopher://")) query.drop(9) else query
     val (host: String, port: Int, gopherPath: String) = baseQuery match
       case s"$host:$port/$selector" => (host, port.toIntOption.getOrElse(70), "/" + selector)
       case s"$host/$selector"       => (host, 70, "/" + selector)
