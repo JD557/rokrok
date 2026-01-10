@@ -33,7 +33,7 @@ object GopherClient:
       )
 
     def parse(inputStream: InputStream): Try[List[GopherItem]] = Using.Manager: use =>
-      use(Source.fromInputStream(inputStream)(Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
+      use(Source.fromInputStream(inputStream)(using Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList
 
   def request(selector: String, hostname: String, port: Int): Try[List[GopherItem]] =
     Using.Manager: use =>
@@ -68,7 +68,7 @@ object GopherClient:
       out.flush()
 
       println("Waiting response")
-      use(Source.fromInputStream(in)(Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList
+      use(Source.fromInputStream(in)(using Codec.UTF8)).getLines().map(str => GopherItem.info(str)).toList
 
   def requestTextAsync(selector: String, hostname: String, port: Int)(implicit
       ec: ExecutionContext
