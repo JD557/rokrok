@@ -25,7 +25,7 @@ final case class Page(
   /** Loads the specified URL, trying to autodetect the format */
   def load(): Page =
     pageType match
-      case PageType.Document    => loadPage()
+      case PageType.Document  => loadPage()
       case PageType.PlainText => loadText()
       case PageType.Image     => loadBitmap()
 
