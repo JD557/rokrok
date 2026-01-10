@@ -9,7 +9,11 @@ import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.Document.Element
 
 final case class GopherItem(itemType: Char, userString: String, selector: String, hostname: String, port: Int):
-  lazy val targetUrl = s"${hostname}:${port}/${itemType}${selector}"
+  lazy val targetUrl =
+    if (hostname.startsWith("gopher://") || !hostname.contains("://")) // Stay in Gopher
+      s"${hostname}:${port}/${itemType}${selector}"
+    else // Change protocol
+      s"${hostname}:${port}/${selector}"
 
 object GopherItem:
   def parse(str: String): GopherItem =

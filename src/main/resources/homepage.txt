@@ -1,8 +1,15 @@
-iWelcome to the Scala Gopher Client!
+iWelcome to the RokRok, the Scala Smolnet Client!
 iHere are some cool links to get you started
 i-------------------------------------------
+i
+iGopher Links
+i
 1Veronica-2 - The reincarnated Gopher search engine!	/v2	gopher.floodgap.com	70
 1Gopher News - A Google News Reader for Gopher	/	gophernews.net	70
 1HN Gopher - A Hacker News Mirror	/	hngopher.com	70
 1Gopherpedia - The gopher interface to Wikipedia	/	gopherpedia.com	70
 1Quux - Archive with multiple files	/	quux.org	70
+i
+iHTTP Links
+i
+1The Code of the Geeks v1.0.1	100/codegeek.txt	http://www.textfiles.com	80

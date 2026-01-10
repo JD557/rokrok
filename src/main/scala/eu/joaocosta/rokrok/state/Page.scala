@@ -8,6 +8,7 @@ import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.client.Client
 import eu.joaocosta.rokrok.client.gopher.*
+import eu.joaocosta.rokrok.client.http.*
 import eu.joaocosta.rokrok.state.Page.PageType
 
 /** Currently shown page
@@ -24,9 +25,9 @@ final case class Page(
   /** Loads the specified URL, trying to autodetect the format */
   def load(): Page =
     pageType match
+      case PageType.Document    => loadPage()
       case PageType.PlainText => loadText()
       case PageType.Image     => loadBitmap()
-      case PageType.Gopher    => loadPage()
 
   /** Returns to the initial state */
   def loadHome(): Page = Page()
@@ -94,32 +95,41 @@ object Page:
     }.get
 
   enum PageType:
+    case Document
     case PlainText
-    case Gopher
     case Image
 
   final case class ParsedQuery(client: Client, host: String, port: Int, pageType: PageType, selector: String)
 
   def parseQuery(query: String): ParsedQuery =
-    val client =
-      if (query.startsWith("gopher://")) GopherClient
-      else GopherClient
+    val (client: Client, defaultPort: Int, baseQuery: String) =
+      if (query.startsWith("gopher://")) (GopherClient, 70, query.drop(9))
+      else if (query.startsWith("http://")) (HttpClient, 80, query.drop(7))
+      else (GopherClient, 70, query)
 
-    val baseQuery                                     = if (query.startsWith("gopher://")) query.drop(9) else query
-    val (host: String, port: Int, gopherPath: String) = baseQuery match
-      case s"$host:$port/$selector" => (host, port.toIntOption.getOrElse(70), "/" + selector)
-      case s"$host/$selector"       => (host, 70, "/" + selector)
-      case s"$host:$port"           => (host, port.toIntOption.getOrElse(70), "/")
-      case host                     => (host, 70, "/")
+    val (host: String, port: Int, path: String) = baseQuery match
+      case s"$host:$port/$path" => (host, port.toIntOption.getOrElse(defaultPort), "/" + path)
+      case s"$host/$path"       => (host, 70, "/" + path)
+      case s"$host:$port"       => (host, port.toIntOption.getOrElse(defaultPort), "/")
+      case host                 => (host, 70, "/")
 
-    val (itemType: Char, selector: String) = gopherPath match
-      case s"/$itemType/$selector" if itemType.size == 1 =>
-        (itemType.head, "/" + selector)
-      case selector => ('1', selector)
+    client match
+      case GopherClient =>
+        val (itemType: Char, selector: String) = path match
+          case s"/$itemType/$selector" if itemType.size == 1 =>
+            (itemType.head, "/" + selector)
+          case selector => ('1', selector)
 
-    val pageType = itemType match
-      case '0'                   => PageType.PlainText
-      case 'I' | ':' | '9' | 'p' => PageType.Image
-      case _                     => PageType.Gopher
+        val pageType = itemType match
+          case '0'                   => PageType.PlainText
+          case 'I' | ':' | '9' | 'p' => PageType.Image
+          case _                     => PageType.Document
 
-    ParsedQuery(client, host, port, pageType, selector)
+        ParsedQuery(client, host, port, pageType, selector)
+
+      case HttpClient =>
+        val pageType =
+          if (path.endsWith(".txt")) PageType.PlainText
+          else if (path.endsWith(".bmp")) PageType.Image
+          else PageType.Document
+        ParsedQuery(client, host, port, pageType, path)
