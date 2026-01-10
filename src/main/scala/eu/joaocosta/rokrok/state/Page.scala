@@ -6,7 +6,7 @@ import scala.util.*
 
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.Document
-import eu.joaocosta.rokrok.GopherClient
+import eu.joaocosta.rokrok.client.gopher.*
 import eu.joaocosta.rokrok.state.Page.PageType
 
 /** Currently shown page
@@ -43,7 +43,7 @@ final case class Page(
   /** Loads the page specified */
   def loadPage(): Page =
     copy(
-      content = GopherClient.requestAsync(selector, host, port).map(Document.fromGopherItems).map(Right.apply),
+      content = GopherClient.requestDocument(selector, host, port).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -51,7 +51,7 @@ final case class Page(
   /** Loads the specified raw text file */
   def loadText(): Page =
     copy(
-      content = GopherClient.requestTextAsync(selector, host, port).map(Document.fromGopherItems).map(Right.apply),
+      content = GopherClient.requestPlainText(selector, host, port).map(Document.fromString).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -59,7 +59,7 @@ final case class Page(
   /** Loads the specified raw bitmap file */
   def loadBitmap(): Page =
     copy(
-      content = GopherClient.requestBmpAsync(selector, host, port).map(Left.apply),
+      content = GopherClient.requestImage(selector, host, port).map(Left.apply),
       history = query :: history,
       offset = 0
     )
@@ -89,7 +89,7 @@ object Page:
   val defaultHomepage =
     Using.Manager { use =>
       val is = use(this.getClass().getResourceAsStream("/homepage.txt"))
-      Document.fromGopherItems(GopherClient.GopherItem.parse(is).get)
+      GopherItem.toDocument(GopherItem.parse(is).get)
     }.get
 
   enum PageType:
