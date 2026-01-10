@@ -11,7 +11,9 @@ import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.minart.graphics.image.bmp.BmpImageFormat
 
 object GopherClient:
-  final case class GopherItem(itemType: Char, userString: String, selector: String, hostname: String, port: Int)
+  final case class GopherItem(itemType: Char, userString: String, selector: String, hostname: String, port: Int):
+    lazy val targetUrl = s"${hostname}:${port}/${itemType}${selector}"
+
   object GopherItem:
     def parse(str: String): GopherItem =
       val raw = str.split("\t")

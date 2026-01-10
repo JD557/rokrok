@@ -7,8 +7,8 @@ import eu.joaocosta.interim.skins.*
 import eu.joaocosta.rokrok.*
 import eu.joaocosta.rokrok.state.Page
 
-/** List with all items */
-def itemList(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[Page] =
+/** Document component */
+def document(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[Page] =
   new DynamicComponentWithValue[Page]:
     val rowPadding = 0
     val rowSize    = font.lineHeight + 2 * rowPadding
@@ -21,7 +21,7 @@ def itemList(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[Pa
         val maxOffset = math.max(0, pageState.get.textContent.size - maxItems)
         pageState.modifyRefs: (_, _, _, _, offset) =>
           slider(
-            "itemList" |> "scroll",
+            "document" |> "scroll",
             0,
             maxOffset,
             SliderSkin.default().copy(colorScheme = colorScheme)
@@ -34,4 +34,4 @@ def itemList(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[Pa
             .zip(row)
             .foreach:
               case ((item, idx), itemArea) =>
-                gopherItem("itemList" |> idx, item, font, colorScheme)(itemArea, pageState)
+                docElement("document" |> idx, item, font, colorScheme)(itemArea, pageState)

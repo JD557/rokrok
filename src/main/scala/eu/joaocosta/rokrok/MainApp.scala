@@ -28,7 +28,7 @@ object MainApp:
           header(colorScheme)(page)
           val contentArea = nextRow.fill()
           rectangle(contentArea, colorScheme.background)
-          itemList(font, colorScheme)(contentArea, page)
+          document(font, colorScheme)(contentArea, page)
           page.get.imageContent.foreach: surface =>
             image(colorScheme)(contentArea, surface)
 

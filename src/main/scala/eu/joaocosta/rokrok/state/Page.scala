@@ -5,13 +5,14 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.*
 
 import eu.joaocosta.minart.graphics.RamSurface
+import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.GopherClient
 
 /** Currently shown page
   */
 final case class Page(
     query: String = "localhost",
-    content: Future[Either[RamSurface, List[GopherClient.GopherItem]]] = Future.successful(Right(Page.defaultHomepage)),
+    content: Future[Either[RamSurface, Document]] = Future.successful(Right(Page.defaultHomepage)),
     searchInput: Option[String] = None,
     history: List[String] = Nil,
     offset: Int = 0
@@ -41,7 +42,7 @@ final case class Page(
   /** Loads the page specified */
   def loadPage(): Page =
     copy(
-      content = GopherClient.requestAsync(selector, host, port).map(Right.apply),
+      content = GopherClient.requestAsync(selector, host, port).map(Document.fromGopherItems).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -49,7 +50,7 @@ final case class Page(
   /** Loads the specified raw text file */
   def loadText(): Page =
     copy(
-      content = GopherClient.requestTextAsync(selector, host, port).map(Right.apply),
+      content = GopherClient.requestTextAsync(selector, host, port).map(Document.fromGopherItems).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -71,7 +72,8 @@ final case class Page(
     ).loadPage()
 
   /** Text content ignoring errors and binary files */
-  val textContent: List[GopherClient.GopherItem] = content.value.flatMap(_.toOption).flatMap(_.toOption).getOrElse(Nil)
+  val textContent: List[Document.Element] =
+    content.value.flatMap(_.toOption).flatMap(_.toOption).map(_.elements).getOrElse(Nil)
 
   /** Image content, ignoring errors and text files */
   val imageContent: Option[RamSurface] = content.value.flatMap(_.toOption).flatMap(_.left.toOption)
@@ -86,7 +88,7 @@ object Page:
   val defaultHomepage =
     Using.Manager { use =>
       val is = use(this.getClass().getResourceAsStream("/homepage.txt"))
-      GopherClient.GopherItem.parse(is).get
+      Document.fromGopherItems(GopherClient.GopherItem.parse(is).get)
     }.get
 
   final case class ParsedQuery(host: String, port: Int, itemType: Char, selector: String)
