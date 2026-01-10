@@ -23,4 +23,4 @@ def errorWindow(colorScheme: ColorScheme): ComponentWithValue[Page] =
             handleSkin = HandleSkin.default().copy(colorScheme = colorScheme)
           )(area): windowArea =>
             text(windowArea.shrink(4), colorScheme.text, message)
-        pageState.modifyIf(nextState.isEmpty)(_.copy(content = Future.successful(Right(Nil))))
+        pageState.modifyIf(nextState.isEmpty)(_.copy(content = Future.successful(Right(Document.empty))))

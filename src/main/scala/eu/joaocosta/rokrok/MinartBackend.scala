@@ -122,7 +122,7 @@ object MinartBackend:
           if (appSettings.postProcess)
             canvas.view
               .flatMap((color) =>
-                (x, y) =>
+                (_, y) =>
                   val scanLineSub = MinartColor.grayscale(15 * (y % 2))
                   val scanLineAdd = if (y >= scanY && y <= scanY + 30) MinartColor(0, 5, 0) else MinartColor(0, 0, 0)
                   color - scanLineSub + scanLineAdd

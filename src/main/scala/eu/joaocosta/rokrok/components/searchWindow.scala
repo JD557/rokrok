@@ -10,7 +10,6 @@ import eu.joaocosta.rokrok.state.Page
 def searchWindow(colorScheme: ColorScheme): ComponentWithValue[Page] =
   new ComponentWithValue[Page]:
     def render(area: Rect, pageState: Ref[Page]): Component[Unit] =
-      var triggerSearch = false
       pageState.get.searchInput.foreach: searchQuery =>
         val (newSearchInput, _) = window(
           "search_window",
