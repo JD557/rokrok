@@ -7,6 +7,7 @@ import scala.util.*
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.GopherClient
+import eu.joaocosta.rokrok.state.Page.PageType
 
 /** Currently shown page
   */
@@ -17,14 +18,14 @@ final case class Page(
     history: List[String] = Nil,
     offset: Int = 0
 ):
-  val Page.ParsedQuery(host, port, itemType, selector) = Page.parseQuery(query)
+  val Page.ParsedQuery(host, port, pageType, selector) = Page.parseQuery(query)
 
   /** Loads the specified URL, trying to autodetect the format */
   def load(): Page =
-    itemType match
-      case '0'                   => loadText()
-      case 'I' | ':' | '9' | 'p' => loadBitmap()
-      case _                     => loadPage()
+    pageType match
+      case PageType.PlainText => loadText()
+      case PageType.Image     => loadBitmap()
+      case PageType.Gopher    => loadPage()
 
   /** Returns to the initial state */
   def loadHome(): Page = Page()
@@ -91,7 +92,12 @@ object Page:
       Document.fromGopherItems(GopherClient.GopherItem.parse(is).get)
     }.get
 
-  final case class ParsedQuery(host: String, port: Int, itemType: Char, selector: String)
+  enum PageType:
+    case PlainText
+    case Gopher
+    case Image
+
+  final case class ParsedQuery(host: String, port: Int, pageType: PageType, selector: String)
 
   def parseQuery(query: String): ParsedQuery =
     val baseQuery                                     = if (query.startsWith("gopher://")) query.drop(9) else query
@@ -106,4 +112,9 @@ object Page:
         (itemType.head, "/" + selector)
       case selector => ('1', selector)
 
-    ParsedQuery(host, port, itemType, selector)
+    val pageType = itemType match
+      case '0'                   => PageType.PlainText
+      case 'I' | ':' | '9' | 'p' => PageType.Image
+      case _                     => PageType.Gopher
+
+    ParsedQuery(host, port, pageType, selector)
