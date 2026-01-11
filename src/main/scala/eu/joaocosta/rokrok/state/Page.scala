@@ -2,6 +2,7 @@ package eu.joaocosta.rokrok.state
 
 import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.io.*
 import scala.util.*
 
 import eu.joaocosta.minart.graphics.RamSurface
@@ -88,8 +89,8 @@ object Page:
   val defaultHomepage: Document =
     Using
       .Manager { use =>
-        val is = use(this.getClass().getResourceAsStream("/homepage.txt"))
-        GopherFormat.parseDocument(is, Request.parse(""))
+        val source = use(Source.fromResource("homepage.txt"))
+        GopherFormat.parseDocument(source.getLines(), Request.parse(""))
       }
       .flatten
       .get

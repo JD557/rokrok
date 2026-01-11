@@ -2,6 +2,7 @@ package eu.joaocosta.rokrok.client
 
 import java.net.*
 import scala.concurrent.*
+import scala.io.*
 import scala.util.Using
 
 import eu.joaocosta.minart.graphics.RamSurface
@@ -39,7 +40,7 @@ object GopherClient extends Client:
           out.write(s"$selector\r\n".getBytes())
           out.flush()
 
-          format.parseDocument(in, request).get
+          format.parseDocument(use(Source.fromInputStream(in)(using Codec.UTF8)).getLines(), request).get
         }.get
 
   def requestImage(request: Request)(using ExecutionContext): Future[RamSurface] =
