@@ -1,4 +1,4 @@
-package eu.joaocosta.rokrok.client.http
+package eu.joaocosta.rokrok.client
 
 import java.net.*
 import scala.concurrent.*
@@ -8,12 +8,16 @@ import scala.util.Using
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.client.Client
+import eu.joaocosta.rokrok.format.Format
 
 object HttpClient extends Client:
-  def requestDocument(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[Document] =
-    Future.failed(new Exception("Rich documents are not supported via HTTP"))
+  def protocol: String = "http://"
 
-  def requestPlainText(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[String] =
+  def defaultPort: Int = 80
+
+  def requestDocument(format: Format, selector: String, hostname: String, port: Int)(using
+      ExecutionContext
+  ): Future[Document] =
     Future.apply:
       blocking:
         Using.Manager { use =>
@@ -28,7 +32,7 @@ object HttpClient extends Client:
           out.write("\r\n".getBytes())
           out.flush()
 
-          use(Source.fromInputStream(in)(using Codec.UTF8)).getLines().dropWhile(_ != "").mkString("\n")
+          format.parseDocument(use(Source.fromInputStream(in)(using Codec.UTF8)).getLines().dropWhile(_ != "")).get
         }.get
 
   def requestImage(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[RamSurface] =

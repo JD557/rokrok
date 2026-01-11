@@ -1,33 +1,23 @@
-package eu.joaocosta.rokrok.client.gopher
+package eu.joaocosta.rokrok.client
 
 import java.net.*
 import scala.concurrent.*
-import scala.io.*
 import scala.util.Using
 
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.minart.graphics.image.bmp.BmpImageFormat
 import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.client.Client
+import eu.joaocosta.rokrok.format.*
 
 object GopherClient extends Client:
-  def requestDocument(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[Document] =
-    Future.apply:
-      blocking:
-        val res = Using.Manager: use =>
-          val socket = new Socket(hostname, port)
-          socket.setSoTimeout(5000)
+  def protocol: String = "gopher://"
 
-          val in  = use(socket.getInputStream())
-          val out = use(socket.getOutputStream())
+  def defaultPort: Int = 70
 
-          out.write(s"$selector\r\n".getBytes())
-          out.flush()
-
-          GopherItem.parse(in).get
-        GopherItem.toDocument(res.get)
-
-  def requestPlainText(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[String] =
+  def requestDocument(format: Format, selector: String, hostname: String, port: Int)(using
+      ExecutionContext
+  ): Future[Document] =
     Future.apply:
       blocking:
         Using.Manager { use =>
@@ -40,7 +30,7 @@ object GopherClient extends Client:
           out.write(s"$selector\r\n".getBytes())
           out.flush()
 
-          use(Source.fromInputStream(in)(using Codec.UTF8)).getLines().mkString("\n")
+          format.parseDocument(in).get
         }.get
 
   def requestImage(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[RamSurface] =

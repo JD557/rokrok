@@ -24,23 +24,23 @@ def docElement(
             text(column(0) ++ column(3), colorScheme.text, description, font)
           case Document.Element.Link(description, url) =>
             pageState.modifyIf(link(id |> description, column(0) ++ column(3), description, font, colorScheme))(
-              _.copy(query = url).load()
+              _.setUrl(url).load()
             )
           case Document.Element.Input(description, url) =>
             pageState.modifyIf(link(id |> description, column(0) ++ column(3), description, font, colorScheme))(
-              _.copy(query = url, searchInput = Some(""))
+              _.setUrl(url).copy(searchInput = Some(""))
             )
           case Document.Element.Image(description, url) =>
             if (url.endsWith(".bmp"))
               pageState.modifyIf(link(id |> description, column(0) ++ column(3), description, font, colorScheme))(
-                _.copy(query = url).loadBitmap()
+                _.setUrl(url).loadBitmap()
               )
             else
               text(column(0) ++ column(3), colorScheme.text, description, font)
           case Document.Element.File(description, url, datatype) =>
             if (datatype == "TEXT")
               pageState.modifyIf(link(id |> description, column(0) ++ column(3), description, font, colorScheme))(
-                _.copy(query = url).load()
+                _.setUrl(url).load()
               )
             else
               text(column(0) ++ column(3), colorScheme.text, description, font)

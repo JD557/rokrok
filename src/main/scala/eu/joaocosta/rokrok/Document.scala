@@ -5,9 +5,12 @@ final case class Document(elements: List[Document.Element])
 object Document:
   def empty = Document(Nil)
 
+  def fromStrings(strs: IterableOnce[String]): Document =
+    if (strs.iterator.isEmpty) Document.empty
+    else Document(strs.iterator.toList.map(s => Element.Text(s)))
+
   def fromString(str: String): Document =
-    if (str.isEmpty) Document.empty
-    else Document(str.split("\n").toList.map(s => Element.Text(s)))
+    fromStrings(str.split("\n"))
 
   enum Element:
     case Text(content: String)
