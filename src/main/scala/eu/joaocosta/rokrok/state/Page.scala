@@ -89,7 +89,7 @@ object Page:
   val defaultHomepage: Document =
     Using
       .Manager { use =>
-        val source = use(Source.fromResource("homepage.txt"))
+        val source = use(Source.fromInputStream(this.getClass().getResourceAsStream("/homepage.txt")))
         GopherFormat.parseDocument(source.getLines(), Request.parse(""))
       }
       .flatten

@@ -47,9 +47,12 @@ object GeminiFormat extends Format:
       else if (str.startsWith("=>")) // Link
         val raw  = str.drop(2).trim.split("[ \t]")
         val url  = raw.headOption.getOrElse("/")
+        val text =
+          if (raw.size >= 2) raw.drop(1).mkString(" ")
+          else url
         val item = GeminiItem(
           itemType = "=>",
-          userString = raw.drop(1).mkString(" "),
+          userString = text,
           url = url
         )
         item
