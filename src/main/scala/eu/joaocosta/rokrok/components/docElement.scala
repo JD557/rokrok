@@ -19,6 +19,10 @@ def docElement(
         item match
           case Document.Element.Text(content) =>
             text(column(0) ++ column(3), colorScheme.text, content, font)
+          case Document.Element.MonospaceText(content) =>
+            // TODO: Change font
+            rectangle((column(0) ++ column(3)).grow(2), colorScheme.secondary)
+            text(column(0) ++ column(3), colorScheme.text, content, font)
           case Document.Element.Error(description) =>
             // TODO: Change color
             text(column(0) ++ column(3), colorScheme.text, description, font)
@@ -48,6 +52,7 @@ def docElement(
             text(column(0) ++ column(3), colorScheme.text, description, font)
         val itemDescription = item match
           case _: Document.Element.Text            => ""
+          case _: Document.Element.MonospaceText   => ""
           case _: Document.Element.Error           => "[ERROR]"
           case _: Document.Element.Link            => "[LINK]"
           case _: Document.Element.Input           => "[INPUT]"

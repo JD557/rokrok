@@ -14,6 +14,7 @@ object Document:
 
   enum Element:
     case Text(content: String)
+    case MonospaceText(content: String)
     case Error(description: String)
     case Link(description: String, url: String)
     case Input(description: String, url: String)
