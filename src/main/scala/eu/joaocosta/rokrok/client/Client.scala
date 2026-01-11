@@ -4,8 +4,13 @@ import scala.concurrent.*
 
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.Document
+import eu.joaocosta.rokrok.Request
+import eu.joaocosta.rokrok.format.Format
 
 trait Client:
-  def requestDocument(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[Document]
-  def requestPlainText(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[String]
-  def requestImage(selector: String, hostname: String, port: Int)(using ExecutionContext): Future[RamSurface]
+  def protocol: String
+  def defaultPort: Int
+  def requestDocument(request: Request, format: Format)(using
+      ExecutionContext
+  ): Future[Document]
+  def requestImage(request: Request)(using ExecutionContext): Future[RamSurface]

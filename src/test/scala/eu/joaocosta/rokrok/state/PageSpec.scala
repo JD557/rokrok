@@ -3,12 +3,12 @@ package eu.joaocosta.rokrok.state
 class PageSpec extends munit.FunSuite:
   test("Page.parseQuery parses queries with the correct defaults"):
     assertEquals(
-      Page.parseQuery("example.org"),
+      Page.parseQuery("example.org/1/"),
       Page.parseQuery("gopher://example.org:70/1/")
     )
 
     assertEquals(
-      Page.parseQuery("example.org:71"),
+      Page.parseQuery("example.org:71/1/"),
       Page.parseQuery("gopher://example.org:71/1/")
     )
 

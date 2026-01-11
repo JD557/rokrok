@@ -10,6 +10,10 @@ i
 1Gopherpedia - The gopher interface to Wikipedia	/	gopherpedia.com	70
 1Quux - Archive with multiple files	/	quux.org	70
 i
+iSpartan Links
+i
+1The Spartan Protocol Homepage	/	spartan://spartan.mozz.us	300
+i
 iHTTP Links
 i
 1The Code of the Geeks v1.0.1	100/codegeek.txt	http://www.textfiles.com	80
