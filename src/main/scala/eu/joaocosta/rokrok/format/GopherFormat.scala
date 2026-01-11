@@ -7,9 +7,10 @@ import scala.util.Using
 
 import eu.joaocosta.rokrok.Document
 import eu.joaocosta.rokrok.Document.Element
+import eu.joaocosta.rokrok.Request
 
 object GopherFormat extends Format:
-  def parseDocument(inputStream: InputStream): Try[Document] =
+  def parseDocument(inputStream: InputStream, requestContext: Request): Try[Document] =
     Using.Manager: use =>
       val items =
         use(Source.fromInputStream(inputStream)(using Codec.UTF8)).getLines().map(str => GopherItem.parse(str)).toList

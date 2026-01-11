@@ -6,6 +6,7 @@ import scala.util.*
 
 import eu.joaocosta.minart.graphics.RamSurface
 import eu.joaocosta.rokrok.Document
+import eu.joaocosta.rokrok.Request
 import eu.joaocosta.rokrok.client.*
 import eu.joaocosta.rokrok.format.*
 import eu.joaocosta.rokrok.state.Page.PageType
@@ -19,7 +20,8 @@ final case class Page(
     history: List[String] = Nil,
     offset: Int = 0
 ):
-  val Page.ParsedQuery(client, host, port, pageType, selector) = Page.parseQuery(query)
+  val Page.ParsedQuery(request @ Request(client, host, port, path), pageType, selector) =
+    Page.parseQuery(query)
 
   /** Sets a URL */
   def setUrl(url: String): Page =
@@ -48,7 +50,7 @@ final case class Page(
   /** Loads the page specified */
   def loadPage(format: Format): Page =
     copy(
-      content = client.requestDocument(format, selector, host, port).map(Right.apply),
+      content = client.requestDocument(request, format).map(Right.apply),
       history = query :: history,
       offset = 0
     )
@@ -56,7 +58,7 @@ final case class Page(
   /** Loads the specified raw bitmap file */
   def loadBitmap(): Page =
     copy(
-      content = client.requestImage(selector, host, port).map(Left.apply),
+      content = client.requestImage(request).map(Left.apply),
       history = query :: history,
       offset = 0
     )
@@ -87,7 +89,7 @@ object Page:
     Using
       .Manager { use =>
         val is = use(this.getClass().getResourceAsStream("/homepage.txt"))
-        GopherFormat.parseDocument(is)
+        GopherFormat.parseDocument(is, Request.parse(""))
       }
       .flatten
       .get
@@ -97,41 +99,28 @@ object Page:
     case PlainText
     case Image
 
-  final case class ParsedQuery(client: Client, host: String, port: Int, pageType: PageType, selector: String)
+  final case class ParsedQuery(context: Request, pageType: PageType, selector: String)
 
   def parseQuery(query: String, defaultClient: Client = GopherClient): ParsedQuery =
-    val (client: Client, baseQuery: String) =
-      Seq(GopherClient, HttpClient, SpartanClient)
-        .find(client => query.startsWith(client.protocol))
-        .map(client => (client, query.drop(client.protocol.size)))
-        .getOrElse((defaultClient, query))
-        
-    val (host: String, port: Int, path: String) = baseQuery match
-      case s"$host:$port/$path" => (host, port.toIntOption.getOrElse(client.defaultPort), "/" + path)
-      case s"$host/$path"       => (host, client.defaultPort, "/" + path)
-      case s"$host:$port"       => (host, port.toIntOption.getOrElse(client.defaultPort), "/")
-      case host                 => (host, client.defaultPort, "/")
+    val request = Request.parse(query, defaultClient)
 
-    client match
+    request.client match
       case GopherClient =>
-        val (itemType: Char, selector: String) = path match
-          case s"/$itemType/$selector" if itemType.size == 1 =>
-            (itemType.head, "/" + selector)
-          case selector => ('1', selector)
+        val (itemType: Char, selector: String) = GopherClient.extractItemTypeAndSelector(request)
 
         val pageType = itemType match
           case '0'                   => PageType.PlainText
           case 'I' | ':' | '9' | 'p' => PageType.Image
           case _                     => PageType.Document(GopherFormat)
 
-        ParsedQuery(client, host, port, pageType, selector)
+        ParsedQuery(request, pageType, selector)
 
       case HttpClient =>
         val pageType =
-          if (path.endsWith(".txt")) PageType.PlainText
-          else if (path.endsWith(".bmp")) PageType.Image
+          if (request.path.endsWith(".txt")) PageType.PlainText
+          else if (request.path.endsWith(".bmp")) PageType.Image
           else PageType.PlainText
-        ParsedQuery(client, host, port, pageType, path)
+        ParsedQuery(request, pageType, request.path)
 
       case SpartanClient =>
-        ParsedQuery(client, host, port, PageType.Document(GeminiFormat), path)
+        ParsedQuery(request, PageType.Document(GeminiFormat), request.path)
