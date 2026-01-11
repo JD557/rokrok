@@ -68,7 +68,27 @@ object MinartBackend:
         case x     =>
           x.baseChar
             .map(char =>
-              if (keyboardInput.keysDown(Shift)) char.toUpper.toString
+              if (keyboardInput.keysDown(Shift))
+                if (char.isLetter) char.toUpper.toString
+                else
+                  keyboardInput.locale match {
+                    case Some("de-DE") | Some("de-AT") | Some("de-CH") | Some("es-ES") | Some("pt-PT") | Some("sv-FI") |
+                        Some("sv-SE") =>
+                      char match {
+                        case '7'  => "/"
+                        case '.'  => ":"
+                        case '-'  => "_"
+                        case '\'' => "?"
+                        case c    => c.toString
+                      }
+                    case _ =>
+                      char match {
+                        case '/' => "?"
+                        case ';' => ":"
+                        case '-' => "_"
+                        case c   => c.toString
+                      }
+                  }
               else char.toString
             )
             .getOrElse("")
