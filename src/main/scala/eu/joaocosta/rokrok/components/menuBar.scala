@@ -18,7 +18,7 @@ def menuBar(colorScheme: ColorScheme): ComponentWithValue[Settings] =
 
   new ComponentWithValue[Settings]:
     def render(area: Rect, settings: Ref[Settings]): Component[Unit] =
-      settings.modifyRefs: (settingsPannel, fileMenu, _, _, _) =>
+      settings.modifyRefs: (settingsPannel, fileMenu, _, _, _, _) =>
         rectangle(area, colorScheme.secondary)
         dynamicColumns(area, 0):
           fileSelect(fileMenu) match

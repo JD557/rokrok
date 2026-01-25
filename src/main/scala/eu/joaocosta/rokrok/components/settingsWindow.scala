@@ -24,8 +24,16 @@ def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component
       SelectSkin.default().copy(colorScheme = colorScheme)
     )
 
+  val keyboardLayoutSelect =
+    select(
+      "keyboardLayout",
+      Settings.keyboardLayouts.map(_._1),
+      "Keyboard Layout",
+      SelectSkin.default().copy(colorScheme = colorScheme)
+    )
+
   (settings
-    .modifyRefs: (panelState, _, skinMenu, fontMenu, fullScreen) =>
+    .modifyRefs: (panelState, _, skinMenu, fontMenu, keyboardLayoutMenu, fullScreen) =>
       window(
         "settings",
         "Settings",
@@ -42,6 +50,9 @@ def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component
           columns(nextRow(16), 2, 2):
             text(summon, colorScheme.text, "Font:")
             fontSelect(fontMenu)
+          columns(nextRow(16), 2, 2):
+            text(summon, colorScheme.text, "Keyboard Layout:")
+            keyboardLayoutSelect(keyboardLayoutMenu)
           columns(nextRow(16), 2, 2):
             text(summon, colorScheme.text, "Full Screen:")
             checkbox("settings" |> "fullscreen", skin = CheckboxSkin.default().copy(colorScheme = colorScheme))(
