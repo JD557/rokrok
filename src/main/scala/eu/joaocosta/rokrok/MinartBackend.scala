@@ -59,26 +59,23 @@ object MinartBackend:
     )
   )
 
-  private def processKeyboard(keyboardInput: KeyboardInput): String =
+  private def processKeyboard(keyboardInput: KeyboardInput, keyboardLayout: KeyboardLayout): String =
     import KeyboardInput.Key._
     keyboardInput.events
       .collect { case KeyboardInput.Event.Pressed(key) => key }
       .flatMap {
         case Enter => ""
         case x     =>
-          x.baseChar
-            .map(char =>
-              if (keyboardInput.keysDown(Shift)) char.toUpper.toString
-              else char.toString
-            )
-            .getOrElse("")
+          if (keyboardInput.keysDown(Shift))
+            keyboardLayout.shift(x).baseChar.map(_.toUpper.toString).getOrElse("")
+          else x.baseChar.map(_.toString).getOrElse("")
       }
       .mkString
 
-  private def getInputState(canvas: Canvas): InputState = InputState(
+  private def getInputState(canvas: Canvas, keyboardLayout: KeyboardLayout): InputState = InputState(
     canvas.getPointerInput().position.map(pos => (pos.x, pos.y)),
     canvas.getPointerInput().isPressed,
-    processKeyboard(canvas.getKeyboardInput())
+    processKeyboard(canvas.getKeyboardInput(), keyboardLayout)
   )
 
   private def renderUi(canvas: Canvas, renderOps: List[RenderOp]): Unit =
@@ -113,7 +110,7 @@ object MinartBackend:
         if (appSettings.fullScreen != canvas.canvasSettings.fullScreen) {
           canvas.changeSettings(canvas.canvasSettings.copy(fullScreen = appSettings.fullScreen))
         }
-        val inputState = getInputState(canvas)
+        val inputState = getInputState(canvas, getSettings.keyboardLayout)
         canvas.clear()
         val ops = body(inputState)._1
         renderUi(canvas, ops)
