@@ -16,9 +16,9 @@ jobs:
         fetch-depth: 0
     - uses: coursier/cache-action@v7
     - uses: VirtusLab/scala-cli-setup@main
-    - uses: extractions/setup-just@v1
       with:
         power: true
+    - uses: extractions/setup-just@v1
     - name: Install dependencies
       run: cs install scalafmt
     - name: Check format
@@ -36,9 +36,9 @@ jobs:
         fetch-depth: 0
     - uses: coursier/cache-action@v7
     - uses: VirtusLab/scala-cli-setup@main
-    - uses: extractions/setup-just@v1
       with:
         power: true
+    - uses: extractions/setup-just@v1
     - name: Publish
       run: just publish
       env:
