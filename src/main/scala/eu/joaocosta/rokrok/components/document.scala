@@ -8,10 +8,10 @@ import eu.joaocosta.rokrok.*
 import eu.joaocosta.rokrok.state.Page
 
 /** Document component */
-def document(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[Page] =
+def document(font: FontPack, colorScheme: ColorScheme): DynamicComponentWithValue[Page] =
   new DynamicComponentWithValue[Page]:
     val rowPadding = 0
-    val rowSize    = font.lineHeight + 2 * rowPadding
+    val rowSize    = font.heading.lineHeight + 2 * rowPadding
 
     def allocateArea(using allocator: AreaAllocator): Rect = allocator.fill()
 
@@ -27,11 +27,9 @@ def document(font: Font, colorScheme: ColorScheme): DynamicComponentWithValue[Pa
             SliderSkin.default().copy(colorScheme = colorScheme)
           )(nextColumn(16), offset)
         val start = pageState.get.offset
-        val end   = start + maxItems
-        rows(nextColumn(maxSize), maxItems, rowPadding): row ?=>
+        dynamicRows(nextColumn(maxSize).shrink(4), rowPadding): nextRow ?=>
           pageState.get.textContent.zipWithIndex
-            .slice(start, end)
-            .zip(row)
+            .drop(start)
             .foreach:
-              case ((item, idx), itemArea) =>
-                docElement("document" |> idx, item, font, colorScheme)(itemArea, pageState)
+              case (item, idx) =>
+                docElement("document" |> idx, item, font, colorScheme)(pageState)
