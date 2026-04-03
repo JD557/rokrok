@@ -1,10 +1,22 @@
 # RokRok
 
-An experimental [Gopher](https://en.wikipedia.org/wiki/Gopher_(protocol)) browser written in Scala.
+An experimental browser for alternative web protocols written in Scala.
 
-![A screenshot of the Gopher UI](screenshot.png)
+Supports the following protocols:
+- [HTTP](https://en.wikipedia.org/wiki/HTTP)
+- [Gopher](https://en.wikipedia.org/wiki/Gopher_(protocol))
+- [Spartan](https://github.com/michael-lazar/spartan)
 
-This is mostly a toy project to experiment with Scala Native's multi threading.
+And the following formats:
+- Plain Text
+- BMP images
+- Gopher
+- Gemtext (with Spartan extensions)
+
+
+![A screenshot of the UI](screenshot.png)
+
+This is mostly a toy project to experiment with Scala Native's networking capabilities and [InterIm](https://github.com/JD557/interim/).
 
 ## Running
 
