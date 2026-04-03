@@ -8,9 +8,10 @@ import eu.joaocosta.rokrok.state.*
 
 object MainApp:
   val uiContext = new UiContext()
-  val fullArea  = Rect(0, 0, 960, 540)
 
   val appState = Ref(MainState())
+
+  def fullArea = Rect(0, 0, appState.get.settings.aspectRatio._1, appState.get.settings.aspectRatio._2)
 
   def application(inputState: InputState) =
     ui(inputState, uiContext):

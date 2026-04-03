@@ -14,12 +14,14 @@ final case class Settings(
     skinMenu: PanelState[Int] = PanelState.closed(0),
     fontMenu: PanelState[Int] = PanelState.closed(0),
     keyboardLayoutMenu: PanelState[Int] = PanelState.closed(0),
+    aspectRatioMenu: PanelState[Int] = PanelState.closed(0),
     fullScreen: Boolean = false
 ):
   val colorScheme: ColorScheme       = Settings.colorSchemes(skinMenu.value)._2
   val font: FontPack                 = Settings.fonts(fontMenu.value)._2
   val postProcess: Boolean           = colorScheme == PhosphorTheme
   val keyboardLayout: KeyboardLayout = Settings.keyboardLayouts(keyboardLayoutMenu.value)._2
+  val aspectRatio                    = Settings.aspectRatios(aspectRatioMenu.value)._2
 
 object Settings:
   val colorSchemes: Vector[(String, ColorScheme)] =
@@ -41,4 +43,13 @@ object Settings:
       "en-GB" -> KeyboardLayout.uk,
       "es-ES" -> KeyboardLayout.es,
       "pt-PT" -> KeyboardLayout.pt
+    )
+
+  val aspectRatios: Vector[(String, (Int, Int))] =
+    Vector(
+      "4:3"       -> (800, 600),
+      "16:9"      -> (960, 540),
+      "16:10"     -> (1280, 800),
+      "Retina 14" -> (756, 982),
+      "Retina 16" -> (1728, 1117)
     )

@@ -8,12 +8,14 @@ import eu.joaocosta.rokrok.state.Settings
 
 /** Settings window */
 def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component[Settings] =
+  val selectSkin = SelectSkin.default().copy(colorScheme = colorScheme)
+
   val skinSelect =
     select(
       "skin",
       Settings.colorSchemes.map(_._1),
       "Skin",
-      SelectSkin.default().copy(colorScheme = colorScheme)
+      selectSkin
     )
 
   val fontSelect =
@@ -21,7 +23,7 @@ def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component
       "font",
       Settings.fonts.map(_._1),
       "Font",
-      SelectSkin.default().copy(colorScheme = colorScheme)
+      selectSkin
     )
 
   val keyboardLayoutSelect =
@@ -29,11 +31,19 @@ def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component
       "keyboardLayout",
       Settings.keyboardLayouts.map(_._1),
       "Keyboard Layout",
-      SelectSkin.default().copy(colorScheme = colorScheme)
+      selectSkin
+    )
+
+  val aspectRatioSelect =
+    select(
+      "aspectRatio",
+      Settings.aspectRatios.map(_._1),
+      "Aspect Ratio",
+      selectSkin
     )
 
   (settings
-    .modifyRefs: (panelState, _, skinMenu, fontMenu, keyboardLayoutMenu, fullScreen) =>
+    .modifyRefs: (panelState, _, skinMenu, fontMenu, keyboardLayoutMenu, aspectRatioMenu, fullScreen) =>
       window(
         "settings",
         "Settings",
@@ -53,6 +63,9 @@ def settingsWindow(colorScheme: ColorScheme)(settings: Ref[Settings]): Component
           columns(nextRow(16), 2, 2):
             text(summon, colorScheme.text, "Keyboard Layout:")
             keyboardLayoutSelect(keyboardLayoutMenu)
+          columns(nextRow(16), 2, 2):
+            text(summon, colorScheme.text, "Aspect Ratio:")
+            aspectRatioSelect(aspectRatioMenu)
           columns(nextRow(16), 2, 2):
             text(summon, colorScheme.text, "Full Screen:")
             checkbox("settings" |> "fullscreen", skin = CheckboxSkin.default().copy(colorScheme = colorScheme))(
