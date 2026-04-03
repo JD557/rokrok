@@ -25,6 +25,8 @@ object GeminiFormat extends Format:
         item.itemType match
           case "" =>
             Element.Text(item.userString)
+          case "#" =>
+            Element.Heading(item.userString)
           case "```" =>
             Element.MonospaceText(item.userString)
           case "=>" =>
@@ -47,12 +49,21 @@ object GeminiFormat extends Format:
       else if (str.startsWith("=>")) // Link
         val raw  = str.drop(2).trim.split("[ \t]")
         val url  = raw.headOption.getOrElse("/")
+        val text =
+          if (raw.size >= 2) raw.drop(1).mkString(" ")
+          else url
         val item = GeminiItem(
           itemType = "=>",
-          userString = raw.drop(1).mkString(" "),
+          userString = text,
           url = url
         )
         item
+      else if (str.startsWith("#")) // Heading
+        GeminiItem(
+          itemType = "#",
+          userString = str,
+          url = ""
+        )
       else
         GeminiItem(
           itemType = "",
