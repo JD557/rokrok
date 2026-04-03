@@ -107,6 +107,11 @@ object MinartBackend:
     AppLoop
       .statelessRenderLoop { (canvas: Canvas) =>
         val appSettings = getSettings
+        if (appSettings.aspectRatio != (canvas.width, canvas.height)) {
+          canvas.changeSettings(
+            canvas.canvasSettings.copy(width = appSettings.aspectRatio._1, height = appSettings.aspectRatio._2)
+          )
+        }
         if (appSettings.fullScreen != canvas.canvasSettings.fullScreen) {
           canvas.changeSettings(canvas.canvasSettings.copy(fullScreen = appSettings.fullScreen))
         }
