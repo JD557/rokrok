@@ -17,7 +17,7 @@ final case class Settings(
     fullScreen: Boolean = false
 ):
   val colorScheme: ColorScheme       = Settings.colorSchemes(skinMenu.value)._2
-  val font: FontPack           = Settings.fonts(fontMenu.value)._2
+  val font: FontPack                 = Settings.fonts(fontMenu.value)._2
   val postProcess: Boolean           = colorScheme == PhosphorTheme
   val keyboardLayout: KeyboardLayout = Settings.keyboardLayouts(keyboardLayoutMenu.value)._2
 
