@@ -4,10 +4,10 @@ build: format
   scala-cli --power compile --suppress-experimental-warning .
 
 check-format:
-  scalafmt . --check
+  scala-cli fmt . --check
 
 format:
-  scalafmt .
+  scala-cli fmt .
 
 test:
   scala-cli --power test --suppress-experimental-warning .
